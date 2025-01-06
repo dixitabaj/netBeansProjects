@@ -7,10 +7,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
 package com.craft.view;
 //import necessary frameworks
+
 import com.craft.controlller.Validation;
+import com.craft.controlller.algorithm.InsertionSort;
+import com.craft.controlller.algorithm.MergeSort;
+import com.craft.controlller.algorithm.SelectionSort;
 import com.craft.model.CraftModel;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -21,6 +24,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import java.awt.Font;
+import java.util.ArrayList;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
@@ -33,25 +37,31 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
 
     private List<CraftModel> craftList; //declare a list to store products
     private CardLayout layout;//declare cardlayout
-    
+
     DefaultTableModel table;//declare table model for displaying products in the table
+    MergeSort merge = new MergeSort();
+    InsertionSort insertionSort = new InsertionSort();
+    SelectionSort selectionSort = new SelectionSort();
 
     ;
-    
+
 
     /**
-     * Creates new form Craft2
+     * Constructor: creates new form of Craft_23048590DixitaBajracharya
      */
     public Craft_23048590DixitaBajracharya() {
         initComponents();// Initialize GUI components
         layoutPane();//set layout for different screen
-        
+
         startProgress();//start the loading page
         registerProducts();//call registerProducts() craftproducts into the system
         productOverview();//display product overview
 
     }
 
+    /**
+     * Creates card layout that sets up multiple screens and manages them
+     */
     private void layoutPane() {
         layout = new CardLayout();//initialize card layout
         getContentPane().setLayout(layout);//set the layout for content pane
@@ -59,70 +69,83 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
         getContentPane().add(panelMainScreen, "mainScreen");//add main screen
         getContentPane().add(loadingScreen, "loadingScreen");//add loading page
     }
-//show specific screen
+
+    /**
+     * Switches the screen to the specified one.
+     *
+     * @param screenName Name of the screen to display.
+     */
     private void loadScreen(String screenName) {
-        layout.show(getContentPane(), screenName);
+        layout.show(getContentPane(), screenName);//shows specific screen
     }
-//register products into the system
+
+    /**
+     * register handicraft products into the list
+     */
     private void registerProducts() {
         craftList = new LinkedList<>();//initalize linked list
-        addProduct(new CraftModel("128U2U2A", "Mika", 2999.9f, 60, "pottery", 233, "active", "2024/09/22", 8 ));
+        addProduct(new CraftModel("128U2U2A", "Mika", 2999.9f, 60, "pottery", 233, "active", "2024/09/22", 8));
         addProduct(new CraftModel("213ACSWC", "Decorative Plate", 3999.0f, 75, "ceramics", 322, "inactive", "2024/12/24", 12));
         addProduct(new CraftModel("92VCDW24", "Elegant Bowl", 5599.0f, 30, "ceramics", 656, "inactive", "2023/01/24", 7));
         addProduct(new CraftModel("22RKLWB2", "Wood Sculpture", 6999.8f, 50, "woodcarft", 452, "discontinued", "2023/12/14", 3));
         addProduct(new CraftModel("12SFWE23", "Art Deco Ceramic Vase", 7999.9f, 20, "ceramics", 56, "inactive", "2024/02/28", 6));
         addProduct(new CraftModel("GFAJ833A", "Modern pot Pitcher", 9999.7f, 15, "pottery", 34, "discontinued", "2020/12/18", 4));
+    }
+
+    /**
+     * Display progress bar on the screen
+     */
+    private void startProgress() {
+        loadScreen("loadingScreen");
+        javax.swing.SwingWorker<Void, Integer> worker = new javax.swing.SwingWorker<>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                int counter = 0;
+                while (counter <= 100) {
+                    publish(counter);  // Publish the current progress
+                    try {
+                        Thread.sleep(30);  // Simulate work
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    counter += 1;
+                }
+                return null;
             }
 
-private void startProgress() {
-    loadScreen("loadingScreen");
-    javax.swing.SwingWorker<Void, Integer> worker = new javax.swing.SwingWorker<>() {
-        @Override
-        protected Void doInBackground() throws Exception {
-            int counter = 0;
-            while (counter <= 100) {
-                publish(counter);  // Publish the current progress
-                try {
-                    Thread.sleep(30);  // Simulate work
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                counter += 1;
+            @Override
+            protected void process(java.util.List<Integer> chunks) {
+                // Get the last published progress
+                int progress = chunks.get(chunks.size() - 1);
+                progressBar.setValue(progress);  // Update progress bar
+                SwingUtilities.invokeLater(() -> {
+                    if (progress < 25) {
+                        progressBarNaming.setText("Retrieving file...");
+                    } else if (progress < 50) {
+                        progressBarNaming.setText("Processing data...");
+                    } else if (progress < 75) {
+                        progressBarNaming.setText("Saving file...");
+                    } else if (progress < 100) {
+                        progressBarNaming.setText("Finalizing...");
+                    } else {
+                        progressBarNaming.setText("Done");
+                    }
+                });
             }
-            return null;
-        }
 
-        @Override
-        protected void process(java.util.List<Integer> chunks) {
-            // Get the last published progress
-            int progress = chunks.get(chunks.size() - 1);
-            progressBar.setValue(progress);  // Update progress bar
-            SwingUtilities.invokeLater(() -> {
-                if (progress < 25) {
-                    progressBarNaming.setText("Retrieving file...");
-                } else if (progress < 50) {
-                    progressBarNaming.setText("Processing data...");
-                } else if (progress < 75) {
-                    progressBarNaming.setText("Saving file...");
-                } else if (progress < 100) {
-                    progressBarNaming.setText("Finalizing...");
-                } else {
-                    progressBarNaming.setText("Done");
-                }
-            });
-        }
+            @Override
+            protected void done() {
+                loadScreen("loginScreen");  // Switch to login screen
+                System.out.println("Progress done!");
+            }
+        };
+        worker.execute();
+    }
 
-        @Override
-        protected void done() {
-            loadScreen("loginScreen");  // Switch to login screen 
-            System.out.println("Progress done!");
-        }
-    };
-    worker.execute();  
-}
-
-  
-   //clear data from the text fields and reset the validation
+    /**
+     * clear data from the text fields and reset the validation
+    *
+     */
     private void clearData() {
         productCodeTextField.setText("");
         productNameTextField.setText("");
@@ -131,45 +154,59 @@ private void startProgress() {
         productDateTextField.setText("");
         productSalesTextField.setText("");
         productWeightTextField.setText("");
-        resetValidation();
+        resetValidation();// Clear validation errors
     }
-//add products into the list and table
-    private void addProduct(CraftModel products) {
 
-        craftList.add(products);
+    /**
+     * add products into the list and updates table
+     *
+     * @param products CraftModel Objects to be added
+     */
+    private void addProduct(CraftModel products) {
+        craftList.add(products);//add product to the list
         table = (DefaultTableModel) craftTable.getModel();
+        // Add product details as a new row in the table
         table.addRow(new Object[]{products.getProductId(), products.getName(), products.getPrice(), products.getStock(), products.getCategory(), products.getTotalSales(), products.getStatus(), products.getDateCreated(), products.getWeight()});
-        productOverview();
+        productOverview();// Update the product overview
+
     }
-// check validity of the credentials entered
+
+    /*
+     *check validity of the credentials entered
+     */
     private boolean checkCredentials() {
         String password = new String(jPasswordField3.getPassword());
-        String username=usernameTextField.getText();
-        if (Validation.isNull(username) || Validation.isNull(password)){
-             errorMismatch.setText("Please enter your username and password");
-             return false;
-}
-             else if (!password.equals("word") || !username.equals("pass")) {
+        String username = usernameTextField.getText().trim();
+        usernameTextField.setText("admin");
+        jPasswordField3.setText("admin");
+        if (Validation.isNull(username) || Validation.isNull(password)) {
+            errorMismatch.setText("Please enter your username and password");
+            return false;
+        } else if (!password.equals("admin") || !username.equals("admin")) {
             errorMismatch.setText("Invalid Username and Password");
             return false;
-        } 
-        else {
-                 errorMismatch.setText(""); 
+        } else {
+            errorMismatch.setText("");
             return true;
-        
-    }
-    }
 
-//check the existence of product code
-    private boolean checkExistingValue(String productCode){
-        for (CraftModel obj1 : craftList) {
-        if (obj1.getProductId().equals(productCode)) {
-            return true; // A match is found, the product code exists
         }
     }
-    return false; 
-}
-//validate the inputs entered by the user
+
+    /*
+    *check the existence of product code
+     */
+    private boolean checkExistingValue(String productCode) {
+        // Iterate through the list of existing craft items to find duplicates
+        for (CraftModel obj1 : craftList) {
+            if (obj1.getProductId().equals(productCode)) {
+                return true; // A match is found, the product code exists
+            }
+        }
+        return false;
+    }
+/*
+    *validate the inputs entered by the user
+    */
     private boolean checkEmpty(JTextField jtextField, String title, JLabel errorLbl, String errorMsg, Color errorColor, Color successColor, boolean valid) {
         if (Validation.isNull(jtextField.getText())) {
             errorLbl.setText(title + " is empty");
@@ -188,60 +225,60 @@ private void startProgress() {
         }
 
     }
-//reset all validation and error messages   
+    
+//reset all validation and error messages
     private void resetValidation() {
-    // Reset all error messages and borders to default
+        // Reset all error messages and borders to default
 
+        errorMessageProdCode.setText("");
 
-    
-    errorMessageProdCode.setText("");
+        errorMessageName.setText("");
 
-    errorMessageName.setText("");
+        errorMessagePrice.setText("");
 
-    errorMessagePrice.setText("");
+        errorMessageStock.setText("");
 
-    errorMessageStock.setText("");
-    
-   errorMessageCategory.setText("");
-    
-    errorMessageStatus.setText("");  
-    
-    errorMessageDate.setText(""); 
-    
-    errorMessageWeight.setText(""); 
-    
-    errorMessageSales.setText("");
-    
-    successfulMessage.setText("");
-    
-    productNameTextField.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Product Name"));
-    productPriceTextField.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Product Price")); 
-    productStockTextField.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Product Stock"));
-    productCategoryComboBox.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Category"));
-    productDateTextField.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Date Created"));
-    productSalesTextField.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Product Sales"));
-    productWeightTextField.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Weight"));
-    productStatusComboBox.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Product Status"));
-    productCodeTextField.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Product Code"));
-}
-//validate the selection of combobox  
-    private boolean checkComboBoxValidation(JComboBox comboBox, String title, JLabel errorMessage, Color errorColor, Color successColor) {
-    String selectedItem = comboBox.getSelectedItem().toString();
-    if ("Select an item".equals(selectedItem)) {
-        errorMessage.setText("Please select an item");
-        comboBox.setBorder(createTitledBorder(errorColor, title)); // Set the border to red
+        errorMessageCategory.setText("");
+
+        errorMessageStatus.setText("");
+
+        errorMessageDate.setText("");
+
+        errorMessageWeight.setText("");
+
+        errorMessageSales.setText("");
+
         successfulMessage.setText("");
-        return false;
-    } else {
-        errorMessage.setText(""); // Hide the error message if validation is successful
-        comboBox.setBorder(createTitledBorder(successColor, title)); // Set the border to green
-        return true;
+
+        productNameTextField.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Product Name"));
+        productPriceTextField.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Product Price"));
+        productStockTextField.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Product Stock"));
+        productCategoryComboBox.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Category"));
+        productDateTextField.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Date Created"));
+        productSalesTextField.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Product Sales"));
+        productWeightTextField.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Weight"));
+        productStatusComboBox.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Product Status"));
+        productCodeTextField.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Product Code"));
     }
-}
+    
+//validate the selection of combobox
+    private boolean checkComboBoxValidation(JComboBox comboBox, String title, JLabel errorMessage, Color errorColor, Color successColor) {
+        String selectedItem = comboBox.getSelectedItem().toString();
+        if ("Select an item".equals(selectedItem)) {
+            errorMessage.setText("Please select an item");
+            comboBox.setBorder(createTitledBorder(errorColor, title)); // Set the border to red
+            successfulMessage.setText("");
+            return false;
+        } else {
+            errorMessage.setText(""); // Hide the error message if validation is successful
+            comboBox.setBorder(createTitledBorder(successColor, title)); // Set the border to green
+            return true;
+        }
+    }
 
     //create a titled border ith a specific color and title
     private Border createTitledBorder(Color color, String title) {
-        
+
         return javax.swing.BorderFactory.createTitledBorder(
                 javax.swing.BorderFactory.createLineBorder(color, 2),
                 title,
@@ -249,132 +286,135 @@ private void startProgress() {
                 javax.swing.border.TitledBorder.DEFAULT_POSITION,
                 new java.awt.Font("Helvetica Neue", 1, 13),
                 color
-                
         );
-        
+
     }
-//retriece total sales of the product  
-    private void totalSales()
-    {
+    
+//retrieve total sales of the product
+    private void totalSales() {
         int total = 0;
-        for (int i=0; i<craftList.size(); i++){
-            total+=craftList.get(i).getTotalSales()*craftList.get(i).getPrice();
+        for (int i = 0; i < craftList.size(); i++) {
+            total += craftList.get(i).getTotalSales() * craftList.get(i).getPrice();
         }
-            totalSalesLabel.setText("Rs. " + total);
-    } 
-    
-//retriece total stock of the product  
-    private void totalStock(){
-        int stock=0;
-        for (int i=0; i<craftList.size(); i++){
-            stock+=craftList.get(i).getStock();
+        totalSalesLabel.setText("Rs. " + total);
+    }
+
+//retrieve total stock of the product
+    private void totalStock() {
+        int stock = 0;
+        for (int i = 0; i < craftList.size(); i++) {
+            stock += craftList.get(i).getStock();
         }
-            totalStockLevel.setText(String.valueOf(stock));
-        
+        totalStockLevel.setText(String.valueOf(stock));
+
+    }
+
+//retriece total item sold of the product
+    private void itemsSold() {
+        int soldItems = 0;
+        for (int i = 0; i < craftList.size(); i++) {
+            soldItems += craftList.get(i).getTotalSales();
+        }
+
+        totalItemSoldLabel.setText(String.valueOf(soldItems));
     }
     
-//retriece total item sold of the product     
-    private void itemsSold(){
-        int soldItems=0;
-        for (int i=0; i<craftList.size(); i++){
-            soldItems+=craftList.get(i).getTotalSales();
-        }
-        
-            totalItemSoldLabel.setText(String.valueOf(soldItems));
-    }
-//retrieve product overview    
-    private void productOverview(){
+//retrieve product overview
+    private void productOverview() {
         totalSales();
         totalStock();
         itemsSold();
     }
 
-    //check and validate inputs entered bu the users
-    private boolean validation(){
+    /*
+    Method to validate form fields for various data types
+    */
+    private boolean validation() {
         boolean valid = true;
-       valid &= checkEmpty(productCodeTextField, "Product Code", errorMessageProdCode, "The code must have at least 10 digits", Color.RED, Color.GREEN, Validation.validateCode(productCodeTextField.getText()));
-        
-        valid &= checkEmpty(productNameTextField, "Product Name", errorMessageName, "Invalid Product Name", Color.RED, Color.GREEN, Validation.validateName(productNameTextField.getText()));
+        valid &= checkEmpty(productCodeTextField, "Product Code", errorMessageProdCode, "The code must have at least 10 digits", Color.RED, Color.GREEN, Validation.validateCode(productCodeTextField.getText()));
+
+        valid &= checkEmpty(productNameTextField, "Product Name", errorMessageName, "Name must contain alphabets only", Color.RED, Color.GREEN, Validation.validateName(productNameTextField.getText()));
         //valid &= checkEmpty(productSalesTextField, "Total Sales", errorMessageSales, "Invalid date", Color.RED, Color.GREEN, Validation.validateSales(Integer.parseInt(productSalesTextField.getText())));
-        valid &= checkEmpty(productDateTextField, "Product date", errorMessageDate, "Invalid date", Color.RED, Color.GREEN, Validation.validateDate(productDateTextField.getText()));
-       valid &= checkComboBoxValidation(productCategoryComboBox , "Product Category", errorMessageCategory, Color.RED, Color.GREEN);
-       valid &= checkComboBoxValidation(productStatusComboBox, "Product Status", errorMessageStatus, Color.RED, Color.GREEN);
+        valid &= checkEmpty(productDateTextField, "Product date", errorMessageDate, "Date must be in yyyy/mm/dd format", Color.RED, Color.GREEN, Validation.validateDate(productDateTextField.getText()));
+        valid &= checkComboBoxValidation(productCategoryComboBox, "Product Category", errorMessageCategory, Color.RED, Color.GREEN);
+        valid &= checkComboBoxValidation(productStatusComboBox, "Product Status", errorMessageStatus, Color.RED, Color.GREEN);
 
-            // Validate price field
-    String priceText = productPriceTextField.getText();
-    if (Validation.isNull(priceText)) {
-    errorMessagePrice.setText("Product price cannot be empty");
-    productPriceTextField.setBorder(createTitledBorder(Color.RED, "Product Price"));
-  
-} else {
-
-        try {
-            valid &= checkEmpty(productPriceTextField, "Product Price", errorMessagePrice, "Please enter a valid price", Color.RED, Color.GREEN, Validation.validatePrice(Float.parseFloat(priceText)));
-        } catch(NumberFormatException e) {
-            errorMessagePrice.setText("Invalid price entry");
+        // Validate price field
+        String priceText = productPriceTextField.getText();
+        if (Validation.isNull(priceText)) {
+            errorMessagePrice.setText("Product price cannot be empty");
             productPriceTextField.setBorder(createTitledBorder(Color.RED, "Product Price"));
-        }
-    }
-    
-    String sales = productSalesTextField.getText(); // Remove any leading/trailing whitespace
-if (Validation.isNull(sales)) {
-    errorMessageSales.setText("Sales cannot be empty");
-    productSalesTextField.setBorder(createTitledBorder(Color.RED, "Product Sales"));
-  
-} else {
-    try {
-        valid &= checkEmpty(productSalesTextField, "Product sales", errorMessageSales, "Please enter a valid stock", Color.RED, Color.GREEN, Validation.validateSales(Integer.parseInt(sales)));
-        System.out.println("");
-    } catch (NumberFormatException e) {
-        errorMessageSales.setText("Invalid sale entry");
-        productSalesTextField.setBorder(createTitledBorder(Color.RED, "Product Sales"));
-       
-    }
-}
 
-    // Validate stock field
-    String stockText = productStockTextField.getText();
-    if (Validation.isNull(stockText)) {
-        errorMessageStock.setText("Product stock cannot be empty");
-        productStockTextField.setBorder(createTitledBorder(Color.RED, "Product Stock"));
-    } else {
-        try {
-            valid &= checkEmpty(productStockTextField, "Product Stock", errorMessageStock, "Please enter a valid stock", Color.RED, Color.GREEN, Validation.validateStock(Integer.parseInt(stockText)));
-        } catch(NumberFormatException e) {
-            errorMessageStock.setText("Invalid stock entry");
+        } else {
+
+            try {
+                valid &= checkEmpty(productPriceTextField, "Product Price", errorMessagePrice, "Please enter a valid price", Color.RED, Color.GREEN, Validation.validatePrice(Float.parseFloat(priceText)));
+            } catch (NumberFormatException e) {
+                errorMessagePrice.setText("price must contain numeric values only");
+                productPriceTextField.setBorder(createTitledBorder(Color.RED, "Product Price"));
+            }
+        }
+
+        String sales = productSalesTextField.getText(); // Remove any leading/trailing whitespace
+        if (Validation.isNull(sales)) {
+            errorMessageSales.setText("Sales cannot be empty");
+            productSalesTextField.setBorder(createTitledBorder(Color.RED, "Product Sales"));
+
+        } else {
+            try {
+                valid &= checkEmpty(productSalesTextField, "Product sales", errorMessageSales, "sales must contain numeric values only", Color.RED, Color.GREEN, Validation.validateSales(Integer.parseInt(sales)));
+                System.out.println("");
+            } catch (NumberFormatException e) {
+                errorMessageSales.setText("Invalid sale entry");
+                productSalesTextField.setBorder(createTitledBorder(Color.RED, "Product Sales"));
+
+            }
+        }
+
+        // Validate stock field
+        String stockText = productStockTextField.getText();
+        if (Validation.isNull(stockText)) {
+            errorMessageStock.setText("Product stock cannot be empty");
             productStockTextField.setBorder(createTitledBorder(Color.RED, "Product Stock"));
+        } else {
+            try {
+                valid &= checkEmpty(productStockTextField, "Product Stock", errorMessageStock, "Please enter a valid stock", Color.RED, Color.GREEN, Validation.validateStock(Integer.parseInt(stockText)));
+            } catch (NumberFormatException e) {
+                errorMessageStock.setText("stock must contain numeric values only");
+                productStockTextField.setBorder(createTitledBorder(Color.RED, "Product Stock"));
+            }
         }
+
+        // Validate weight field
+        String weight = productWeightTextField.getText();
+        if (Validation.isNull(weight)) {
+            errorMessageWeight.setText("Product weight cannot be empty");
+            productWeightTextField.setBorder(createTitledBorder(Color.RED, "Product Weight"));
+        } else {
+            try {
+                valid &= checkEmpty(productWeightTextField, "Product Weight", errorMessageWeight, "Please enter a valid stock", Color.RED, Color.GREEN, Validation.validateWeight(Float.parseFloat(weight)));
+            } catch (NumberFormatException e) {
+                errorMessageWeight.setText(" weight must contain numeric values only");
+                productWeightTextField.setBorder(createTitledBorder(Color.RED, "Product Weight"));
+            }
+        }
+        return valid;
     }
 
-    // Validate weight field
-    String weight = productWeightTextField.getText();
-    if (Validation.isNull(weight)) {
-        errorMessageWeight.setText("Product weight cannot be empty");
-        productWeightTextField.setBorder(createTitledBorder(Color.RED, "Product Weight"));
-    } else {
-        try {
-            valid &= checkEmpty(productWeightTextField, "Product Weight", errorMessageWeight, "Please enter a valid stock", Color.RED, Color.GREEN, Validation.validateWeight(Float.parseFloat(weight)));
-        } catch(NumberFormatException e) {
-            errorMessageWeight.setText("Invalid weight entry");
-            productWeightTextField.setBorder(createTitledBorder(Color.RED, "Product Weight"));
-        }
-    }
-    return valid;
-    }
-    
     //displays a confirmation dialog with the specified message and title.
-    private int dialogConfirm(String message, String title){
-        int option=JOptionPane.showConfirmDialog(this, message, title, JOptionPane.YES_NO_OPTION, 
-JOptionPane.QUESTION_MESSAGE);
+    private int dialogConfirm(String message, String title) {
+        int option = JOptionPane.showConfirmDialog(this, message, title, JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
         return option;
     }
+
     //displays a message dialog with the specified message and title.
-    private void dialogMessage(String message, String title){
-        JOptionPane.showMessageDialog(this, message, title,  JOptionPane.ERROR_MESSAGE);
+    private void dialogMessage(String message, String title) {
+        JOptionPane.showMessageDialog(this, message, title, JOptionPane.ERROR_MESSAGE);
         successfulMessage.setText("");
         resetValidation();
     }
-    
+
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
@@ -533,6 +573,9 @@ JOptionPane.QUESTION_MESSAGE);
         totalStockLevel = new javax.swing.JLabel();
         totalItemSoldLabel = new javax.swing.JLabel();
         prodOverviewLabel = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        searchButton = new javax.swing.JButton();
+        searchField = new javax.swing.JTextField();
         loadingScreen = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         progressBar = new javax.swing.JProgressBar();
@@ -603,16 +646,19 @@ JOptionPane.QUESTION_MESSAGE);
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, usernamePasswordLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(mailImg)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
-                .addComponent(usernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(usernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         usernamePasswordLayout.setVerticalGroup(
             usernamePasswordLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(usernamePasswordLayout.createSequentialGroup()
-                .addGroup(usernamePasswordLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(mailImg)
-                    .addComponent(usernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 6, Short.MAX_VALUE))
+                .addGroup(usernamePasswordLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(usernamePasswordLayout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(mailImg))
+                    .addComponent(usernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         getStartedPnl.add(usernamePassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 340, -1));
@@ -643,9 +689,10 @@ JOptionPane.QUESTION_MESSAGE);
             passwordPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, passwordPanelLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(passwordPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPasswordField3, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(passwordTextField))
+                .addComponent(passwordTextField)
+                .addGap(16, 16, 16))
+            .addGroup(passwordPanelLayout.createSequentialGroup()
+                .addComponent(jPasswordField3)
                 .addContainerGap())
         );
 
@@ -657,7 +704,7 @@ JOptionPane.QUESTION_MESSAGE);
         panelLoginScreen.add(getStartedPnl, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 130, 370, 480));
 
         loginImgOverall.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/craft/resources/Screenshot 2024-12-11 at 8.40.21 PM.png"))); // NOI18N
-        panelLoginScreen.add(loginImgOverall, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, -1, -1));
+        panelLoginScreen.add(loginImgOverall, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         jLabel43.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/craft/resources/Screenshot_2024-12-23_at_8.59.45_PM-removebg-preview-5.png"))); // NOI18N
         panelLoginScreen.add(jLabel43, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 450, 1200, 220));
@@ -779,10 +826,11 @@ JOptionPane.QUESTION_MESSAGE);
         jPanel1.add(jPanel14);
         jPanel14.setBounds(20, 1350, 1330, 390);
 
-        jLabel8.setFont(new java.awt.Font("Kokonor", 1, 36)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Kokonor", 1, 48)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(51, 51, 0));
         jLabel8.setText("Bringing Art to Life, One Piece at a Time.");
         jPanel1.add(jLabel8);
-        jLabel8.setBounds(340, 210, 730, 140);
+        jLabel8.setBounds(250, 130, 860, 140);
 
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/craft/resources/Screenshot 2024-12-22 at 4.47.52 PM.png"))); // NOI18N
         jLabel9.setPreferredSize(new java.awt.Dimension(1018, 1962));
@@ -1528,7 +1576,7 @@ JOptionPane.QUESTION_MESSAGE);
         .addGroup(craftTablePanelLayout.createSequentialGroup()
             .addContainerGap()
             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1358, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addContainerGap(16, Short.MAX_VALUE))
     );
     craftTablePanelLayout.setVerticalGroup(
         craftTablePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1580,10 +1628,12 @@ JOptionPane.QUESTION_MESSAGE);
     });
 
     errorMessageProdCode.setForeground(new java.awt.Color(255, 0, 0));
+    errorMessageProdCode.setText("<html><p>");
 
     errorMessagePrice.setForeground(new java.awt.Color(255, 0, 0));
 
     errorMessageName.setForeground(new java.awt.Color(255, 0, 0));
+    errorMessageName.setText("<html><p>");
 
     productSalesTextField.setBackground(new java.awt.Color(242, 240, 231));
     productSalesTextField.setBorder(javax.swing.BorderFactory.createTitledBorder("Total Sales"));
@@ -1669,8 +1719,8 @@ JOptionPane.QUESTION_MESSAGE);
                         .addGroup(productListPnlLayout.createSequentialGroup()
                             .addGap(73, 73, 73)
                             .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(productWeightTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE)
-                                .addComponent(errorMessageWeight, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(productWeightTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(errorMessageWeight, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGap(42, 42, 42)
                             .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(errorMessageDate, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1698,19 +1748,19 @@ JOptionPane.QUESTION_MESSAGE);
                         .addGroup(productListPnlLayout.createSequentialGroup()
                             .addGap(31, 31, 31)
                             .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(productStatusComboBox, 0, 162, Short.MAX_VALUE)
-                                .addComponent(errorMessageStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addComponent(productStatusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(errorMessageStatus))))
                     .addGap(864, 864, 864))
                 .addGroup(productListPnlLayout.createSequentialGroup()
                     .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(productListPnlLayout.createSequentialGroup()
                             .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(errorMessageProdCode, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(productCodeTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE))
+                                .addComponent(productCodeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(errorMessageProdCode))
                             .addGap(18, 18, 18)
                             .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(productNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE)
-                                .addComponent(errorMessageName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addComponent(productNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(errorMessageName)))
                         .addComponent(successfulMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGap(31, 31, 31)
                     .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1720,11 +1770,11 @@ JOptionPane.QUESTION_MESSAGE);
                                 .addComponent(errorMessagePrice, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(productStockTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE)
+                                .addComponent(productStockTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(errorMessageStock, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGap(47, 47, 47)
                             .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(productCategoryComboBox, 0, 162, Short.MAX_VALUE)
+                                .addComponent(productCategoryComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(errorMessageCategory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addComponent(productInfoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGap(0, 0, Short.MAX_VALUE))))
@@ -1739,9 +1789,9 @@ JOptionPane.QUESTION_MESSAGE);
             .addGap(41, 41, 41)
             .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                 .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(errorMessageName, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(errorMessageProdCode, javax.swing.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)
-                    .addComponent(errorMessagePrice, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(errorMessageProdCode, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(errorMessagePrice, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(errorMessageName))
                 .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(errorMessageStock, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(errorMessageCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -1756,10 +1806,11 @@ JOptionPane.QUESTION_MESSAGE);
             .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(productListPnlLayout.createSequentialGroup()
                     .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(errorMessageWeight, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(errorMessageDate, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(errorMessageSales, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGap(15, 15, 15)
+                        .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(errorMessageDate, javax.swing.GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
+                            .addComponent(errorMessageSales, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(errorMessageWeight, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(productWeightTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(productDateTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1846,6 +1897,33 @@ JOptionPane.QUESTION_MESSAGE);
             .addGap(70, 70, 70))
     );
 
+    jComboBox1.setBackground(new java.awt.Color(134, 103, 83));
+    jComboBox1.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
+    jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sort By", "Name - Ascending", "Name - Descending", "Price - Ascending", "Price - Descending", "Stock - Ascending", "Stock - Descending" }));
+    jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jComboBox1ActionPerformed(evt);
+        }
+    });
+
+    searchButton.setBackground(new java.awt.Color(134, 103, 83));
+    searchButton.setForeground(new java.awt.Color(255, 255, 255));
+    searchButton.setText("Search");
+    searchButton.setBorder(null);
+    searchButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            searchButtonActionPerformed(evt);
+        }
+    });
+
+    searchField.setBackground(new java.awt.Color(225, 223, 208));
+    searchField.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+    searchField.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            searchFieldActionPerformed(evt);
+        }
+    });
+
     javax.swing.GroupLayout adminCtrlPnlLayout = new javax.swing.GroupLayout(adminCtrlPnl);
     adminCtrlPnl.setLayout(adminCtrlPnlLayout);
     adminCtrlPnlLayout.setHorizontalGroup(
@@ -1853,24 +1931,39 @@ JOptionPane.QUESTION_MESSAGE);
         .addGroup(adminCtrlPnlLayout.createSequentialGroup()
             .addContainerGap()
             .addGroup(adminCtrlPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(craftTablePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(adminCtrlPnlLayout.createSequentialGroup()
-                    .addComponent(productListPnl, javax.swing.GroupLayout.PREFERRED_SIZE, 1055, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(adminCtrlPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(craftTablePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(adminCtrlPnlLayout.createSequentialGroup()
+                            .addComponent(productListPnl, javax.swing.GroupLayout.PREFERRED_SIZE, 1055, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(prodOverviewPnl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGap(10, 10, 10)))
+                    .addContainerGap())
+                .addGroup(adminCtrlPnlLayout.createSequentialGroup()
+                    .addGap(8, 8, 8)
+                    .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                    .addComponent(prodOverviewPnl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGap(10, 10, 10)))
-            .addContainerGap())
+                    .addComponent(searchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(28, 28, 28))))
     );
     adminCtrlPnlLayout.setVerticalGroup(
         adminCtrlPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(adminCtrlPnlLayout.createSequentialGroup()
-            .addGap(19, 19, 19)
+            .addContainerGap()
+            .addGroup(adminCtrlPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
+                .addComponent(jComboBox1)
+                .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(searchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(craftTablePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addGroup(adminCtrlPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                 .addComponent(productListPnl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(prodOverviewPnl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addContainerGap(94, Short.MAX_VALUE))
+            .addGap(129, 129, 129))
     );
 
     jTabbedPane1.addTab("Admin Control", adminCtrlPnl);
@@ -1938,14 +2031,14 @@ JOptionPane.QUESTION_MESSAGE);
 
     pack();
     }// </editor-fold>//GEN-END:initComponents
-//logs out from the syste,
+//logs out from the system
     private void logOutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logOutButtonActionPerformed
-    int option=JOptionPane.showConfirmDialog(this, "Are you sure you want to log out?", "Log Out", JOptionPane.YES_NO_OPTION, 
-JOptionPane.QUESTION_MESSAGE
-    );
-    if (option==JOptionPane.YES_OPTION){
-        loadScreen("loginScreen");
-    }
+        int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to log out?", "Log Out", JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE
+        );
+        if (option == JOptionPane.YES_OPTION) {
+            loadScreen("loginScreen");
+        }
 
     }//GEN-LAST:event_logOutButtonActionPerformed
 
@@ -1954,64 +2047,62 @@ JOptionPane.QUESTION_MESSAGE
     }//GEN-LAST:event_productCodeTextFieldActionPerformed
 //add product into the system
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
-         
-       boolean valid1= validation();
-    // Check if product code already exists
-        if (!checkExistingValue(productCodeTextField.getText())){
-        if (valid1) {
-            CraftModel addedProd = new CraftModel(productCodeTextField.getText(), productNameTextField.getText(), Float.parseFloat(productPriceTextField.getText()), Integer.parseInt(productStockTextField.getText()), productCategoryComboBox.getSelectedItem().toString(), Integer.parseInt(productSalesTextField.getText()), productStatusComboBox.getSelectedItem().toString(), productDateTextField.getText(), Float.parseFloat(productWeightTextField.getText()));
-            craftList.add(addedProd);
-            addProduct(addedProd);
-            successfulMessage.setText("Product is added Successfully");
-            productOverview();
-        }
-        
-        }
-        else{
+
+        boolean valid1 = validation();
+        // Check if product code already exists
+        if (!checkExistingValue(productCodeTextField.getText())) {
+            if (valid1) {
+                CraftModel addedProd = new CraftModel(productCodeTextField.getText(), productNameTextField.getText(), Float.parseFloat(productPriceTextField.getText()), Integer.parseInt(productStockTextField.getText()), productCategoryComboBox.getSelectedItem().toString(), Integer.parseInt(productSalesTextField.getText()), productStatusComboBox.getSelectedItem().toString(), productDateTextField.getText(), Float.parseFloat(productWeightTextField.getText())); 
+                addProduct(addedProd);// Add the product to the system
+                successfulMessage.setText("Product is added Successfully");
+                productOverview();
+                System.out.println("Original Craft List from add button: " + craftList);
+            }
+        } else {
             resetValidation();
             dialogMessage("the code already exists", "ERROR");
         }
     }//GEN-LAST:event_addButtonActionPerformed
 //update product of the system
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
-    
-        boolean valid2 = validation();
-if (!productCodeTextField.getText().isEmpty()){
-    if (checkExistingValue(productCodeTextField.getText())) {
-        for (int i = 0; i < table.getRowCount(); i++) {
-            if (table.getValueAt(i, 0).toString().equals(productCodeTextField.getText())) {
-                if (valid2) {
-                    craftList.set(i, new CraftModel(productCodeTextField.getText(),productNameTextField.getText(),Float.parseFloat(productPriceTextField.getText()),Integer.parseInt(productStockTextField.getText()),
-                        productCategoryComboBox.getSelectedItem().toString(), Integer.parseInt(productSalesTextField.getText()),
-                        productStatusComboBox.getSelectedItem().toString(),
-                        productDateTextField.getText(),
-                        Float.parseFloat(productWeightTextField.getText())
-                    ));
-                table.setValueAt(productCodeTextField.getText(), i, 0);
-                    table.setValueAt(productNameTextField.getText(), i, 1);
-                    table.setValueAt( Float.parseFloat(productPriceTextField.getText()), i, 2);
-                    table.setValueAt(productStockTextField.getText(), i, 3);
-                    table.setValueAt(productCategoryComboBox.getSelectedItem(), i, 4);
-                    table.setValueAt(productSalesTextField.getText(), i, 5);
-                    table.setValueAt(productStatusComboBox.getSelectedItem(), i, 6);
-                    table.setValueAt(productDateTextField.getText(), i, 7);
-                    table.setValueAt(Float.parseFloat(productWeightTextField.getText()), i, 8);
-                    successfulMessage.setText("Product is updated Successfully");
-                    productOverview();
-                break;
-                }
-            }
-        }
 
-        
-    }else {
-        resetValidation();
-        dialogMessage("The product code doesn't exist", "ERROR");
-    }
-}
-    else{
-        errorMessageProdCode.setText("product code is empty");
+        boolean valid2 = validation();
+        if (!productCodeTextField.getText().isEmpty()) {
+            if (checkExistingValue(productCodeTextField.getText())) {
+                for (int i = 0; i < table.getRowCount(); i++) {
+                    if (table.getValueAt(i, 0).toString().equals(productCodeTextField.getText())) {
+                        if (valid2) {
+                            craftList.set(i, new CraftModel(productCodeTextField.getText(), productNameTextField.getText(), Float.parseFloat(productPriceTextField.getText()), Integer.parseInt(productStockTextField.getText()),
+                                    productCategoryComboBox.getSelectedItem().toString(), Integer.parseInt(productSalesTextField.getText()),
+                                    productStatusComboBox.getSelectedItem().toString(),
+                                    productDateTextField.getText(),
+                                    Float.parseFloat(productWeightTextField.getText())
+                            ));
+                            System.out.println("Original Craft List from update button: " + craftList);
+                            table.setValueAt(productCodeTextField.getText(), i, 0);
+                            table.setValueAt(productNameTextField.getText(), i, 1);
+                            table.setValueAt(Float.parseFloat(productPriceTextField.getText()), i, 2);
+                            table.setValueAt(productStockTextField.getText(), i, 3);
+                            table.setValueAt(productCategoryComboBox.getSelectedItem(), i, 4);
+                            table.setValueAt(productSalesTextField.getText(), i, 5);
+                            table.setValueAt(productStatusComboBox.getSelectedItem(), i, 6);
+                            table.setValueAt(productDateTextField.getText(), i, 7);
+                            table.setValueAt(Float.parseFloat(productWeightTextField.getText()), i, 8);
+                            successfulMessage.setText("Product is updated Successfully");
+                            System.out.println("Original Craft List from add button: " + craftList);
+                            productOverview();
+                            break;
+                        }
+                    }
+                }
+
+            } else {
+                resetValidation();
+                dialogMessage("The product code doesn't exist", "ERROR");
             }
+        } else {
+            errorMessageProdCode.setText("product code is empty");
+        }
 
     }//GEN-LAST:event_updateButtonActionPerformed
 
@@ -2021,13 +2112,13 @@ if (!productCodeTextField.getText().isEmpty()){
 //login users into the system
     private void loginButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButton1ActionPerformed
         // TODO add your handling code here:
-        if (checkCredentials()){
-        loadScreen("mainScreen");
-        jPasswordField3.setText("");
-        usernameTextField.setText("");
+        if (checkCredentials()) {
+            loadScreen("mainScreen");
+            jPasswordField3.setText("");
+            usernameTextField.setText("");
         }
-        
-        
+
+
     }//GEN-LAST:event_loginButton1ActionPerformed
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
@@ -2051,44 +2142,50 @@ if (!productCodeTextField.getText().isEmpty()){
     }//GEN-LAST:event_productCategoryComboBoxActionPerformed
 //delete products from the system
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
-        int option=dialogConfirm( "Are you sure you want to delete?", "delete");
-        
-if (!productCodeTextField.getText().isEmpty()){
-    if (option==JOptionPane.YES_OPTION){
-            
-   if (checkExistingValue(productCodeTextField.getText())) {
-        for (int i = 0; i < table.getRowCount(); i++) {
-            if (table.getValueAt(i, 0).toString().equals(productCodeTextField.getText())) {
-                craftList.remove(i);
-                table.removeRow(i);
-                productOverview();
-                successfulMessage.setText("Deleted Successfully");
-                break;
+
+        int option = dialogConfirm("Are you sure you want to delete?", "Delete");
+
+        if (!productCodeTextField.getText().isEmpty()) {
+            if (option == JOptionPane.YES_OPTION) {
+                String productCode = productCodeTextField.getText();
+                if (checkExistingValue(productCode)) {
+
+                    // Iterate over the table rows to find the matching product code
+                    for (int i = 0; i < table.getRowCount(); i++) {
+                        if (table.getValueAt(i, 0).toString().equals(productCode)) {
+                            craftList.remove(i);
+                            DefaultTableModel model = (DefaultTableModel) craftTable.getModel();
+                            model.removeRow(i);
+                            productOverview();
+                            successfulMessage.setText("Deleted Successfully");
+                            break; // Exit the loop
+                        }
+                    }
+                } else {
+                    // If the product code doesn't exist, show an error dialog
+                    clearData();
+                    dialogMessage("The code doesn't exist", "ERROR");
+                }
             }
+        } else {
+            // Show an error if the product code text field is empty
+            errorMessageProdCode.setText("Product code is empty");
         }
-        }
-   else{
-            clearData();
-            dialogMessage("the code doesnt exists", "ERROR");
-        }
-        }
-            
-        }else{
-        errorMessageProdCode.setText("product code is empty");
-            }
+
+
     }//GEN-LAST:event_deleteButtonActionPerformed
 //clear textfields and error messages from the screen
     private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
-        int option=dialogConfirm( "Are you sure you want to clear?", "Clear");
-        if (option==JOptionPane.YES_OPTION){
-        clearData(); 
-        successfulMessage.setText("");
+        int option = dialogConfirm("Are you sure you want to clear?", "Clear");
+        if (option == JOptionPane.YES_OPTION) {
+            clearData();
+            successfulMessage.setText("");
         }
     }//GEN-LAST:event_clearButtonActionPerformed
 
     private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
-        
-        
+
+
     }//GEN-LAST:event_sendButtonActionPerformed
 
     private void nameAboutUsTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameAboutUsTextFieldActionPerformed
@@ -2103,6 +2200,104 @@ if (!productCodeTextField.getText().isEmpty()){
         // TODO add your handling code here:
     }//GEN-LAST:event_subjectTextFieldActionPerformed
 
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+
+        String selectedOption = (String) jComboBox1.getSelectedItem();
+
+        switch (selectedOption) {
+            case "Name - Ascending":
+                System.out.println("Original Craft List: " + craftList);
+
+                List<CraftModel> sortedListByNameAsc = insertionSort.sortByName(craftList, true);
+                updateTable(sortedListByNameAsc);
+                break;
+            case "Name - Descending":
+                List<CraftModel> sortedListByNameDesc = insertionSort.sortByName(craftList, false);
+                updateTable(sortedListByNameDesc);
+                break;
+            case "Price - Ascending":
+                List<CraftModel> sortedListByPriceAsc = merge.sortByPrice(craftList, true);
+                updateTable(sortedListByPriceAsc);
+                break;
+            case "Price - Descending":
+                List<CraftModel> sortedListByPriceDesc = merge.sortByPrice(craftList, false);
+                updateTable(sortedListByPriceDesc);
+                break;
+            case "Stock - Ascending":
+                List<CraftModel> sortedListByStockAsc = selectionSort.sortByStock(craftList, false);
+                updateTable(sortedListByStockAsc);
+                break;
+            case "Stock - Descending":
+                List<CraftModel> sortedListByStockDesc = selectionSort.sortByStock(craftList, true);
+                updateTable(sortedListByStockDesc);
+                break;
+            default:
+                break;
+        }
+
+
+    }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
+
+        // Sort the craft list by name in ascending order
+        List<CraftModel> sortedListByName = insertionSort.sortByName(craftList, true);
+
+        String targetName = searchField.getText().trim();
+
+        if (targetName.isEmpty()) {
+            System.out.println("Please enter a valid name to search.");
+            return;
+        }
+        // Find matching items with partial match
+        List<CraftModel> matchingItems = new ArrayList<>();
+        for (CraftModel item : sortedListByName) {
+            if (item.getName() != null && item.getName().toLowerCase().equals(targetName.toLowerCase())) {
+                matchingItems.add(item);
+            }
+        }
+        if (!matchingItems.isEmpty()) {
+            System.out.println("Found " + matchingItems.size() + " items containing name: " + targetName);
+            sortedListByName.removeAll(matchingItems);
+            sortedListByName.addAll(0, matchingItems);
+            updateTable(sortedListByName);
+        } else {
+            System.out.println("No items containing name: " + targetName + " found.");
+        }
+
+
+    }//GEN-LAST:event_searchButtonActionPerformed
+
+    private void searchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_searchFieldActionPerformed
+
+    private void updateTable(List<CraftModel> sortedList) {
+        // DefaultTableModel to populate the JTable
+        DefaultTableModel model = (DefaultTableModel) craftTable.getModel();
+
+        // Clear the table before populating with new data
+        model.setRowCount(0);
+
+        // Populate the table with data from the sorted list
+        for (CraftModel product : sortedList) {
+            model.addRow(new Object[]{
+                product.getProductId(),
+                product.getName(),
+                product.getPrice(),
+                product.getStock(),
+                product.getCategory(),
+                product.getTotalSales(),
+                product.getStatus(),
+                product.getDateCreated(),
+                product.getWeight()
+            });
+        }
+        craftTable.revalidate();
+        craftTable.repaint();
+
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -2110,7 +2305,7 @@ if (!productCodeTextField.getText().isEmpty()){
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -2167,6 +2362,7 @@ if (!productCodeTextField.getText().isEmpty()){
     private javax.swing.JPanel homePnl;
     private javax.swing.JLabel itemsSoldLabel;
     private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -2290,6 +2486,8 @@ if (!productCodeTextField.getText().isEmpty()){
     private javax.swing.JTextField productWeightTextField;
     private javax.swing.JProgressBar progressBar;
     private javax.swing.JLabel progressBarNaming;
+    private javax.swing.JButton searchButton;
+    private javax.swing.JTextField searchField;
     private javax.swing.JButton sendButton;
     private javax.swing.JLabel subjectErrorLabel;
     private javax.swing.JTextField subjectTextField;

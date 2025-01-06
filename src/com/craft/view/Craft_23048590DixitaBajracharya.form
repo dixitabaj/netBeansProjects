@@ -146,19 +146,23 @@
                       <Group type="102" alignment="1" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="mailImg" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="7" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                           <Component id="usernameTextField" min="-2" pref="300" max="-2" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Group type="103" groupAlignment="1" attributes="0">
-                              <Component id="mailImg" min="-2" max="-2" attributes="0"/>
-                              <Component id="usernameTextField" min="-2" pref="35" max="-2" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
+                                  <Component id="mailImg" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Component id="usernameTextField" alignment="0" min="-2" pref="41" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace min="0" pref="6" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -214,10 +218,11 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="1" attributes="0">
                           <EmptySpace max="32767" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jPasswordField3" min="-2" pref="35" max="-2" attributes="0"/>
-                              <Component id="passwordTextField" min="-2" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="passwordTextField" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" attributes="0">
+                          <Component id="jPasswordField3" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -265,7 +270,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="0" y="10" width="-1" height="-1"/>
+              <AbsoluteConstraints x="0" y="0" width="-1" height="-1"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -656,13 +661,16 @@
                             <Component class="javax.swing.JLabel" name="jLabel8">
                               <Properties>
                                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                                  <Font name="Kokonor" size="36" style="1"/>
+                                  <Font name="Kokonor" size="48" style="1"/>
+                                </Property>
+                                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                                  <Color blue="0" green="33" red="33" type="rgb"/>
                                 </Property>
                                 <Property name="text" type="java.lang.String" value="Bringing Art to Life, One Piece at a Time."/>
                               </Properties>
                               <Constraints>
                                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                                  <AbsoluteConstraints x="340" y="210" width="730" height="140"/>
+                                  <AbsoluteConstraints x="250" y="130" width="860" height="140"/>
                                 </Constraint>
                               </Constraints>
                             </Component>
@@ -2052,29 +2060,48 @@
                           <Group type="102" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="craftTablePanel" max="32767" attributes="0"/>
                                   <Group type="102" attributes="0">
-                                      <Component id="productListPnl" min="-2" pref="1055" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="craftTablePanel" max="32767" attributes="0"/>
+                                          <Group type="102" attributes="0">
+                                              <Component id="productListPnl" min="-2" pref="1055" max="-2" attributes="0"/>
+                                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                              <Component id="prodOverviewPnl" max="32767" attributes="0"/>
+                                              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" attributes="0">
+                                      <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
+                                      <Component id="searchField" min="-2" pref="310" max="-2" attributes="0"/>
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Component id="prodOverviewPnl" max="32767" attributes="0"/>
-                                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                                      <Component id="searchButton" min="-2" pref="123" max="-2" attributes="0"/>
+                                      <EmptySpace max="32767" attributes="0"/>
+                                      <Component id="jComboBox1" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" max="-2" attributes="0">
+                                  <Component id="jComboBox1" alignment="3" max="32767" attributes="0"/>
+                                  <Component id="searchField" alignment="0" min="-2" pref="38" max="-2" attributes="0"/>
+                                  <Component id="searchButton" min="-2" pref="39" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
                               <Component id="craftTablePanel" min="-2" pref="207" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Component id="productListPnl" max="32767" attributes="0"/>
                                   <Component id="prodOverviewPnl" max="32767" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="94" max="32767" attributes="0"/>
+                              <EmptySpace min="-2" pref="129" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -2088,7 +2115,7 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="jScrollPane2" min="-2" pref="1358" max="-2" attributes="0"/>
-                                  <EmptySpace max="32767" attributes="0"/>
+                                  <EmptySpace pref="16" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -2210,8 +2237,8 @@
                                               <Group type="102" alignment="0" attributes="0">
                                                   <EmptySpace min="-2" pref="73" max="-2" attributes="0"/>
                                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                                      <Component id="productWeightTextField" pref="162" max="32767" attributes="0"/>
-                                                      <Component id="errorMessageWeight" max="32767" attributes="0"/>
+                                                      <Component id="productWeightTextField" min="-2" pref="162" max="-2" attributes="0"/>
+                                                      <Component id="errorMessageWeight" min="-2" pref="162" max="-2" attributes="0"/>
                                                   </Group>
                                                   <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
                                                   <Group type="103" groupAlignment="0" attributes="0">
@@ -2250,8 +2277,8 @@
                                               <Group type="102" alignment="0" attributes="0">
                                                   <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
                                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                                      <Component id="productStatusComboBox" pref="162" max="32767" attributes="0"/>
-                                                      <Component id="errorMessageStatus" max="32767" attributes="0"/>
+                                                      <Component id="productStatusComboBox" min="-2" pref="162" max="-2" attributes="0"/>
+                                                      <Component id="errorMessageStatus" max="-2" attributes="0"/>
                                                   </Group>
                                               </Group>
                                           </Group>
@@ -2261,12 +2288,12 @@
                                           <Group type="103" groupAlignment="0" attributes="0">
                                               <Group type="102" attributes="0">
                                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                                      <Component id="productCodeTextField" min="-2" pref="162" max="-2" attributes="0"/>
                                                       <Component id="errorMessageProdCode" max="32767" attributes="0"/>
-                                                      <Component id="productCodeTextField" pref="162" max="32767" attributes="0"/>
                                                   </Group>
                                                   <EmptySpace type="separate" max="-2" attributes="0"/>
                                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                                      <Component id="productNameTextField" pref="162" max="32767" attributes="0"/>
+                                                      <Component id="productNameTextField" min="-2" pref="162" max="-2" attributes="0"/>
                                                       <Component id="errorMessageName" max="32767" attributes="0"/>
                                                   </Group>
                                               </Group>
@@ -2281,12 +2308,12 @@
                                                   </Group>
                                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                                      <Component id="productStockTextField" pref="162" max="32767" attributes="0"/>
+                                                      <Component id="productStockTextField" min="-2" pref="162" max="-2" attributes="0"/>
                                                       <Component id="errorMessageStock" max="32767" attributes="0"/>
                                                   </Group>
                                                   <EmptySpace min="-2" pref="47" max="-2" attributes="0"/>
                                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                                      <Component id="productCategoryComboBox" pref="162" max="32767" attributes="0"/>
+                                                      <Component id="productCategoryComboBox" min="-2" pref="162" max="-2" attributes="0"/>
                                                       <Component id="errorMessageCategory" max="32767" attributes="0"/>
                                                   </Group>
                                               </Group>
@@ -2309,9 +2336,9 @@
                                   <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="1" attributes="0">
                                       <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                          <Component id="errorMessageName" min="-2" pref="15" max="-2" attributes="0"/>
-                                          <Component id="errorMessageProdCode" alignment="1" pref="23" max="32767" attributes="0"/>
+                                          <Component id="errorMessageProdCode" alignment="1" min="-2" pref="23" max="-2" attributes="0"/>
                                           <Component id="errorMessagePrice" alignment="1" max="32767" attributes="0"/>
+                                          <Component id="errorMessageName" alignment="1" max="32767" attributes="0"/>
                                       </Group>
                                       <Group type="103" groupAlignment="3" attributes="0">
                                           <Component id="errorMessageStock" alignment="3" min="-2" pref="17" max="-2" attributes="0"/>
@@ -2330,11 +2357,13 @@
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" attributes="0">
                                           <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="errorMessageWeight" min="-2" pref="17" max="-2" attributes="0"/>
-                                              <Component id="errorMessageDate" min="-2" pref="14" max="-2" attributes="0"/>
-                                              <Component id="errorMessageSales" alignment="0" min="-2" pref="17" max="-2" attributes="0"/>
+                                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                                  <Component id="errorMessageDate" pref="26" max="32767" attributes="0"/>
+                                                  <Component id="errorMessageSales" alignment="0" max="32767" attributes="0"/>
+                                              </Group>
+                                              <Component id="errorMessageWeight" alignment="0" min="-2" pref="26" max="-2" attributes="0"/>
                                           </Group>
-                                          <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="3" attributes="0">
                                               <Component id="productWeightTextField" alignment="3" min="-2" pref="60" max="-2" attributes="0"/>
                                               <Component id="productDateTextField" alignment="3" min="-2" pref="60" max="-2" attributes="0"/>
@@ -2464,6 +2493,7 @@
                             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                               <Color blue="0" green="0" red="ff" type="rgb"/>
                             </Property>
+                            <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;p&gt;"/>
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JLabel" name="errorMessagePrice">
@@ -2478,6 +2508,7 @@
                             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                               <Color blue="0" green="0" red="ff" type="rgb"/>
                             </Property>
+                            <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;p&gt;"/>
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JTextField" name="productSalesTextField">
@@ -2797,6 +2828,65 @@
                         </Component>
                       </SubComponents>
                     </Container>
+                    <Component class="javax.swing.JComboBox" name="jComboBox1">
+                      <Properties>
+                        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                          <Color blue="53" green="67" red="86" type="rgb"/>
+                        </Property>
+                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                          <Font name="Helvetica Neue" size="14" style="0"/>
+                        </Property>
+                        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                          <StringArray count="7">
+                            <StringItem index="0" value="Sort By"/>
+                            <StringItem index="1" value="Name - Ascending"/>
+                            <StringItem index="2" value="Name - Descending"/>
+                            <StringItem index="3" value="Price - Ascending"/>
+                            <StringItem index="4" value="Price - Descending"/>
+                            <StringItem index="5" value="Stock - Ascending"/>
+                            <StringItem index="6" value="Stock - Descending"/>
+                          </StringArray>
+                        </Property>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jComboBox1ActionPerformed"/>
+                      </Events>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+                      </AuxValues>
+                    </Component>
+                    <Component class="javax.swing.JButton" name="searchButton">
+                      <Properties>
+                        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                          <Color blue="53" green="67" red="86" type="rgb"/>
+                        </Property>
+                        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                          <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                        </Property>
+                        <Property name="text" type="java.lang.String" value="Search"/>
+                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                          <Border info="null"/>
+                        </Property>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="searchButtonActionPerformed"/>
+                      </Events>
+                    </Component>
+                    <Component class="javax.swing.JTextField" name="searchField">
+                      <Properties>
+                        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                          <Color blue="d0" green="df" red="e1" type="rgb"/>
+                        </Property>
+                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                            <TitledBorder/>
+                          </Border>
+                        </Property>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="searchFieldActionPerformed"/>
+                      </Events>
+                    </Component>
                   </SubComponents>
                 </Container>
               </SubComponents>

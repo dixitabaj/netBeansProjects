@@ -70,13 +70,19 @@ public class CraftModel {
     public String getStatus(){
         return status;
     }
-    
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
+    public String toString() {
+        return "CraftModel{" +
+               "productId='" + productId + '\'' +
+               ", name='" + name + '\'' +
+               ", price=" + price +
+               ", stock=" + stock +
+               ", category='" + category + '\'' +
+               ", totalSales=" + totalSales +
+               ", status='" + status + '\'' +
+               ", dateCreated='" + dateCreated + '\'' +
+               ", weight=" + weight +
+               '}';
     }
-    
+
+
 }

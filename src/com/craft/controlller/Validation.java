@@ -23,7 +23,6 @@ public class Validation {
     
     //validate product code
     public static boolean validateCode(String prodCode) {
-        
             return code.matcher(prodCode).matches();
        
     }
@@ -77,6 +76,11 @@ public class Validation {
     
     
     
+
+
+
+
+
 
 
 
