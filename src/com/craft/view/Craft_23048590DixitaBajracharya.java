@@ -10,7 +10,7 @@
 package com.craft.view;
 //import necessary frameworks
 
-import Validation.Validation;
+import com.craft.Validation.Validation;
 import com.craft.controlller.algorithm.InsertionSort;
 import com.craft.controlller.algorithm.MergeSort;
 import com.craft.controlller.algorithm.SelectionSort;
