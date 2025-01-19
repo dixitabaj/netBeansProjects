@@ -70,19 +70,7 @@ public class CraftModel {
     public String getStatus(){
         return status;
     }
-    public String toString() {
-        return "CraftModel{" +
-               "productId='" + productId + '\'' +
-               ", name='" + name + '\'' +
-               ", price=" + price +
-               ", stock=" + stock +
-               ", category='" + category + '\'' +
-               ", totalSales=" + totalSales +
-               ", status='" + status + '\'' +
-               ", dateCreated='" + dateCreated + '\'' +
-               ", weight=" + weight +
-               '}';
-    }
+   
 
 
 }

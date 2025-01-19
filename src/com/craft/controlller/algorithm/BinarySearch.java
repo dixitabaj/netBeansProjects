@@ -1,3 +1,5 @@
+package com.craft.controlller.algorithm;
+
 
 import com.craft.model.CraftModel;
 import java.util.List;
@@ -23,7 +25,7 @@ public CraftModel searchByName(String searchName, List<CraftModel> carftItems,in
 
         int mid = (left + right) / 2;
 
-        if (searchName.toLowerCase().equals(carftItems.get(mid).getName().toLowerCase())) {
+        if (searchName.equalsIgnoreCase(carftItems.get(mid).getName().toLowerCase())) {
             return carftItems.get(mid);
         } else if (searchName.compareToIgnoreCase(carftItems.get(mid).getName()) < 0) {
             return searchByName(searchName, carftItems, left, mid - 1);

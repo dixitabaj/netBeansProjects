@@ -10,10 +10,11 @@
 package com.craft.view;
 //import necessary frameworks
 
-import com.craft.controlller.Validation;
+import Validation.Validation;
 import com.craft.controlller.algorithm.InsertionSort;
 import com.craft.controlller.algorithm.MergeSort;
 import com.craft.controlller.algorithm.SelectionSort;
+import com.craft.controlller.algorithm.BinarySearch; 
 import com.craft.model.CraftModel;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -24,7 +25,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import java.awt.Font;
-import java.util.ArrayList;
+import java.util.Stack;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
@@ -37,14 +38,11 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
 
     private List<CraftModel> craftList; //declare a list to store products
     private CardLayout layout;//declare cardlayout
-
-    DefaultTableModel table;//declare table model for displaying products in the table
     MergeSort merge = new MergeSort();
     InsertionSort insertionSort = new InsertionSort();
     SelectionSort selectionSort = new SelectionSort();
-
-    ;
-
+    Stack<CraftModel> undoDelete = new Stack();
+    BinarySearch binarySearch = new BinarySearch();
 
     /**
      * Constructor: creates new form of Craft_23048590DixitaBajracharya
@@ -52,11 +50,9 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
     public Craft_23048590DixitaBajracharya() {
         initComponents();// Initialize GUI components
         layoutPane();//set layout for different screen
-
         startProgress();//start the loading page
         registerProducts();//call registerProducts() craftproducts into the system
         productOverview();//display product overview
-
     }
 
     /**
@@ -84,12 +80,12 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
      */
     private void registerProducts() {
         craftList = new LinkedList<>();//initalize linked list
-        addProduct(new CraftModel("128U2U2A", "Mika", 2999.9f, 60, "pottery", 233, "active", "2024/09/22", 8));
-        addProduct(new CraftModel("213ACSWC", "Decorative Plate", 3999.0f, 75, "ceramics", 322, "inactive", "2024/12/24", 12));
-        addProduct(new CraftModel("92VCDW24", "Elegant Bowl", 5599.0f, 30, "ceramics", 656, "inactive", "2023/01/24", 7));
-        addProduct(new CraftModel("22RKLWB2", "Wood Sculpture", 6999.8f, 50, "woodcarft", 452, "discontinued", "2023/12/14", 3));
-        addProduct(new CraftModel("12SFWE23", "Art Deco Ceramic Vase", 7999.9f, 20, "ceramics", 56, "inactive", "2024/02/28", 6));
-        addProduct(new CraftModel("GFAJ833A", "Modern pot Pitcher", 9999.7f, 15, "pottery", 34, "discontinued", "2020/12/18", 4));
+        addProduct(new CraftModel("128U2U2A", "Mika", 3000f, 60, "pottery", 233, "active", "2024/09/22", 8));
+        addProduct(new CraftModel("213ACSWC", "Decorative Plate", 4000f, 75, "ceramics", 322, "inactive", "2024/12/24", 12));
+        addProduct(new CraftModel("92VCDW24", "Elegant Bowl", 4000f, 30, "ceramics", 656, "inactive", "2023/01/24", 7));
+        addProduct(new CraftModel("22RKLWB2", "Wood Sculpture", 7000f, 50, "woodcarft", 452, "discontinued", "2023/12/14", 3));
+        addProduct(new CraftModel("12SFWE23", "Art Deco Ceramic Vase", 9000f, 20, "ceramics", 56, "inactive", "2024/02/28", 6));
+        addProduct(new CraftModel("GFAJ833A", "Modern pot Pitcher", 3000f, 15, "pottery", 34, "discontinued", "2020/12/18", 4));
     }
 
     /**
@@ -119,16 +115,44 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
                 int progress = chunks.get(chunks.size() - 1);
                 progressBar.setValue(progress);  // Update progress bar
                 SwingUtilities.invokeLater(() -> {
-                    if (progress < 25) {
+                    if (progress < 5) {
                         progressBarNaming.setText("Retrieving file...");
+                        loadingPgTitleLbl.setText("U_");
+                    } else if (progress < 15) {
+                        loadingPgTitleLbl.setText("UM_");
+                    } else if (progress < 25) {
+                        loadingPgTitleLbl.setText("UMB_");
+                    } else if (progress < 35) {
+                        loadingPgTitleLbl.setText("UMBR_");
+                    } else if (progress < 45) {
+                        loadingPgTitleLbl.setText("UMBRA");
                     } else if (progress < 50) {
                         progressBarNaming.setText("Processing data...");
-                    } else if (progress < 75) {
+                        loadingPgTitleLbl.setText("UMBRA C_");
+                    } else if (progress < 55) {
+                        progressBarNaming.setText("Processing data...");
+                        loadingPgTitleLbl.setText("UMBRA CE_");
+                    } else if (progress < 60) {
+                        loadingPgTitleLbl.setText("UMBRA CER_");
+                    } else if (progress < 65) {
                         progressBarNaming.setText("Saving file...");
-                    } else if (progress < 100) {
+                        loadingPgTitleLbl.setText("UMBRA CERA_");
+                    } else if (progress < 68) {
+                        loadingPgTitleLbl.setText("UMBRA CERAM_");
+                    } else if (progress < 70) {
                         progressBarNaming.setText("Finalizing...");
+                        loadingPgTitleLbl.setText("UMBRA CERAMI_");
+                    } else if (progress < 72) {
+                        loadingPgTitleLbl.setText("UMBRA CERAMIC_");
+                    } else if (progress < 75) {
+                        loadingPgTitleLbl.setText("UMBRA CERAMICS_");
+                    } else if (progress < 85) {
+                        loadingPgTitleLbl.setText("UMBRA CERAMICS");
+                    } else if (progress < 100) {
+                        loadingPgTitleLbl.setText("UMBRA CERAMICS_");
                     } else {
                         progressBarNaming.setText("Done");
+                        loadingPgTitleLbl.setText("UMBRA CERAMICS");
                     }
                 });
             }
@@ -144,7 +168,7 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
 
     /**
      * clear data from the text fields and reset the validation
-    *
+     *
      */
     private void clearData() {
         productCodeTextField.setText("");
@@ -154,21 +178,50 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
         productDateTextField.setText("");
         productSalesTextField.setText("");
         productWeightTextField.setText("");
+        productCategoryComboBox.setSelectedItem("Select an item");
+        productStatusComboBox.setSelectedItem("Select an item");
+        searchField.setText("");
+        searchErrorLbl.setText("");
         resetValidation();// Clear validation errors
     }
 
     /**
-     * add products into the list and updates table
+     * update products in the table
      *
      * @param products CraftModel Objects to be added
      */
+    private void loadTable(List<CraftModel> products) {
+        // Get the table model
+        DefaultTableModel table = (DefaultTableModel) craftTable.getModel();//declare table model for displaying products in the table
+        // Clear existing rows to avoid duplication
+        table.setRowCount(0);
+        if (products != null) {
+            // Add each product as a row in the table
+            for (CraftModel product : products) {
+                table.addRow(new Object[]{
+                    product.getProductId(),
+                    product.getName(),
+                    product.getPrice(),
+                    product.getStock(),
+                    product.getCategory(),
+                    product.getTotalSales(),
+                    product.getStatus(),
+                    product.getDateCreated(),
+                    product.getWeight()
+                });
+            }
+        }
+    }
+
+    /**
+     * add products into the list and update table accordingly
+     *
+     * @param products CraftModel objects
+     */
     private void addProduct(CraftModel products) {
         craftList.add(products);//add product to the list
-        table = (DefaultTableModel) craftTable.getModel();
-        // Add product details as a new row in the table
-        table.addRow(new Object[]{products.getProductId(), products.getName(), products.getPrice(), products.getStock(), products.getCategory(), products.getTotalSales(), products.getStatus(), products.getDateCreated(), products.getWeight()});
+        loadTable(craftList);
         productOverview();// Update the product overview
-
     }
 
     /*
@@ -177,8 +230,6 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
     private boolean checkCredentials() {
         String password = new String(jPasswordField3.getPassword());
         String username = usernameTextField.getText().trim();
-        usernameTextField.setText("admin");
-        jPasswordField3.setText("admin");
         if (Validation.isNull(username) || Validation.isNull(password)) {
             errorMismatch.setText("Please enter your username and password");
             return false;
@@ -188,12 +239,14 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
         } else {
             errorMismatch.setText("");
             return true;
-
         }
     }
 
-    /*
-    *check the existence of product code
+    /**
+     * Check that the product code already exists in the list
+     *
+     * @param productCode entered product code by the user
+     * @return true if the product code exists, false otherwise.
      */
     private boolean checkExistingValue(String productCode) {
         // Iterate through the list of existing craft items to find duplicates
@@ -204,9 +257,20 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
         }
         return false;
     }
-/*
-    *validate the inputs entered by the user
-    */
+
+    /**
+     * Check validity of the inputs entered by the user
+     *
+     * @param jtextField The text field containing the user input.
+     * @param title The field's title, used in error messages.
+     * @param errorLbl The label used to display error messages.
+     * @param errorMsg The specific error message to show if validation fails.
+     * @param errorColor The color to indicate an error state.
+     * @param successColor The color to indicate a valid input.
+     * @param valid Boolean flag indicating whether the input is valid based on
+     * other criteria.
+     * @return true if the input is valid, false if it is empty or invalid.
+     */
     private boolean checkEmpty(JTextField jtextField, String title, JLabel errorLbl, String errorMsg, Color errorColor, Color successColor, boolean valid) {
         if (Validation.isNull(jtextField.getText())) {
             errorLbl.setText(title + " is empty");
@@ -225,31 +289,24 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
         }
 
     }
-    
-//reset all validation and error messages
+
+    /**
+     * reset all validation and error messages
+     */
     private void resetValidation() {
-        // Reset all error messages and borders to default
-
+        // Reset all error messages 
         errorMessageProdCode.setText("");
-
         errorMessageName.setText("");
-
         errorMessagePrice.setText("");
-
         errorMessageStock.setText("");
-
         errorMessageCategory.setText("");
-
         errorMessageStatus.setText("");
-
         errorMessageDate.setText("");
-
         errorMessageWeight.setText("");
-
         errorMessageSales.setText("");
-
         successfulMessage.setText("");
 
+        //Reset all the borders to its default
         productNameTextField.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Product Name"));
         productPriceTextField.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Product Price"));
         productStockTextField.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Product Stock"));
@@ -260,8 +317,18 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
         productStatusComboBox.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Product Status"));
         productCodeTextField.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Product Code"));
     }
-    
-//validate the selection of combobox
+
+    /**
+     * validate the selection of combo box
+     *
+     * @param comboBox The JComboBox containing selectable items.
+     * @param title The title of the combo box.
+     * @param errorMessage The JLabel that displays error messages.
+     * @param errorColor The color to indicate an errors.
+     * @param successColor The color to indicate a valid selection.
+     * @return true if a valid item is selected from the combo box, false if the
+     * default option is still selected.
+     */
     private boolean checkComboBoxValidation(JComboBox comboBox, String title, JLabel errorMessage, Color errorColor, Color successColor) {
         String selectedItem = comboBox.getSelectedItem().toString();
         if ("Select an item".equals(selectedItem)) {
@@ -276,9 +343,14 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
         }
     }
 
-    //create a titled border ith a specific color and title
+    /**
+     * create a titled border with a specific color and title
+     *
+     * @param color The color of the border and title text.
+     * @param title The title of the border.
+     * @return Border object with the specified color, title, and font.
+     */
     private Border createTitledBorder(Color color, String title) {
-
         return javax.swing.BorderFactory.createTitledBorder(
                 javax.swing.BorderFactory.createLineBorder(color, 2),
                 title,
@@ -289,8 +361,10 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
         );
 
     }
-    
-//retrieve total sales of the product
+
+    /**
+     * retrieve total sales of the product
+     */
     private void totalSales() {
         int total = 0;
         for (int i = 0; i < craftList.size(); i++) {
@@ -299,7 +373,9 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
         totalSalesLabel.setText("Rs. " + total);
     }
 
-//retrieve total stock of the product
+    /**
+     * retrieve total stock of the product
+     */
     private void totalStock() {
         int stock = 0;
         for (int i = 0; i < craftList.size(); i++) {
@@ -309,7 +385,9 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
 
     }
 
-//retriece total item sold of the product
+    /**
+     * retrieve total item sold of the product
+     */
     private void itemsSold() {
         int soldItems = 0;
         for (int i = 0; i < craftList.size(); i++) {
@@ -318,97 +396,52 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
 
         totalItemSoldLabel.setText(String.valueOf(soldItems));
     }
-    
-//retrieve product overview
+
+    /**
+     * retrieve product overview
+     */
     private void productOverview() {
         totalSales();
         totalStock();
         itemsSold();
     }
 
-    /*
-    Method to validate form fields for various data types
-    */
+    /**
+     * Method to validate form fields for various data types
+     */
     private boolean validation() {
         boolean valid = true;
-        valid &= checkEmpty(productCodeTextField, "Product Code", errorMessageProdCode, "The code must have at least 10 digits", Color.RED, Color.GREEN, Validation.validateCode(productCodeTextField.getText()));
-
+        valid &= checkEmpty(productCodeTextField, "Product Code", errorMessageProdCode, "<html>The code must have <br>8 digits", Color.RED, Color.GREEN, Validation.validateCode(productCodeTextField.getText()));
         valid &= checkEmpty(productNameTextField, "Product Name", errorMessageName, "Name must contain alphabets only", Color.RED, Color.GREEN, Validation.validateName(productNameTextField.getText()));
-        //valid &= checkEmpty(productSalesTextField, "Total Sales", errorMessageSales, "Invalid date", Color.RED, Color.GREEN, Validation.validateSales(Integer.parseInt(productSalesTextField.getText())));
-        valid &= checkEmpty(productDateTextField, "Product date", errorMessageDate, "Date must be in yyyy/mm/dd format", Color.RED, Color.GREEN, Validation.validateDate(productDateTextField.getText()));
+        valid &= checkEmpty(productPriceTextField, "Product price", errorMessagePrice, "Price must be a number", Color.RED, Color.GREEN, Validation.validatePrice(productPriceTextField.getText()));
+        valid &= checkEmpty(productWeightTextField, "Product Weight", errorMessageWeight, "Weight must be a number", Color.RED, Color.GREEN, Validation.validateWeight(productWeightTextField.getText()));
+        valid &= checkEmpty(productStockTextField, "Product stock", errorMessageStock, "Stock must be a number", Color.RED, Color.GREEN, Validation.validateStock(productStockTextField.getText()));
+        valid &= checkEmpty(productSalesTextField, "Total Sales", errorMessageSales, "Sales must be a number", Color.RED, Color.GREEN, Validation.validateSales(productSalesTextField.getText()));
+        valid &= checkEmpty(productDateTextField, "Product date", errorMessageDate, "<html>Date must be in yyyy/mm/dd <br>format", Color.RED, Color.GREEN, Validation.validateDate(productDateTextField.getText()));
         valid &= checkComboBoxValidation(productCategoryComboBox, "Product Category", errorMessageCategory, Color.RED, Color.GREEN);
         valid &= checkComboBoxValidation(productStatusComboBox, "Product Status", errorMessageStatus, Color.RED, Color.GREEN);
-
-        // Validate price field
-        String priceText = productPriceTextField.getText();
-        if (Validation.isNull(priceText)) {
-            errorMessagePrice.setText("Product price cannot be empty");
-            productPriceTextField.setBorder(createTitledBorder(Color.RED, "Product Price"));
-
-        } else {
-
-            try {
-                valid &= checkEmpty(productPriceTextField, "Product Price", errorMessagePrice, "Please enter a valid price", Color.RED, Color.GREEN, Validation.validatePrice(Float.parseFloat(priceText)));
-            } catch (NumberFormatException e) {
-                errorMessagePrice.setText("price must contain numeric values only");
-                productPriceTextField.setBorder(createTitledBorder(Color.RED, "Product Price"));
-            }
-        }
-
-        String sales = productSalesTextField.getText(); // Remove any leading/trailing whitespace
-        if (Validation.isNull(sales)) {
-            errorMessageSales.setText("Sales cannot be empty");
-            productSalesTextField.setBorder(createTitledBorder(Color.RED, "Product Sales"));
-
-        } else {
-            try {
-                valid &= checkEmpty(productSalesTextField, "Product sales", errorMessageSales, "sales must contain numeric values only", Color.RED, Color.GREEN, Validation.validateSales(Integer.parseInt(sales)));
-                System.out.println("");
-            } catch (NumberFormatException e) {
-                errorMessageSales.setText("Invalid sale entry");
-                productSalesTextField.setBorder(createTitledBorder(Color.RED, "Product Sales"));
-
-            }
-        }
-
-        // Validate stock field
-        String stockText = productStockTextField.getText();
-        if (Validation.isNull(stockText)) {
-            errorMessageStock.setText("Product stock cannot be empty");
-            productStockTextField.setBorder(createTitledBorder(Color.RED, "Product Stock"));
-        } else {
-            try {
-                valid &= checkEmpty(productStockTextField, "Product Stock", errorMessageStock, "Please enter a valid stock", Color.RED, Color.GREEN, Validation.validateStock(Integer.parseInt(stockText)));
-            } catch (NumberFormatException e) {
-                errorMessageStock.setText("stock must contain numeric values only");
-                productStockTextField.setBorder(createTitledBorder(Color.RED, "Product Stock"));
-            }
-        }
-
-        // Validate weight field
-        String weight = productWeightTextField.getText();
-        if (Validation.isNull(weight)) {
-            errorMessageWeight.setText("Product weight cannot be empty");
-            productWeightTextField.setBorder(createTitledBorder(Color.RED, "Product Weight"));
-        } else {
-            try {
-                valid &= checkEmpty(productWeightTextField, "Product Weight", errorMessageWeight, "Please enter a valid stock", Color.RED, Color.GREEN, Validation.validateWeight(Float.parseFloat(weight)));
-            } catch (NumberFormatException e) {
-                errorMessageWeight.setText(" weight must contain numeric values only");
-                productWeightTextField.setBorder(createTitledBorder(Color.RED, "Product Weight"));
-            }
-        }
         return valid;
     }
 
-    //displays a confirmation dialog with the specified message and title.
+    /**
+     * displays a confirmation dialog with the specified message and title.
+     *
+     * @param message The message to display in the dialog box.
+     * @param title The title of the confirmation dialog.
+     * @return The user's choice.
+     */
     private int dialogConfirm(String message, String title) {
         int option = JOptionPane.showConfirmDialog(this, message, title, JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE);
         return option;
     }
 
-    //displays a message dialog with the specified message and title.
+    /**
+     * displays a message dialog with the specified message and title.
+     *
+     * @param message The message to display in the dialog box
+     * @param title The title of the confirmation dialog
+     */
     private void dialogMessage(String message, String title) {
         JOptionPane.showMessageDialog(this, message, title, JOptionPane.ERROR_MESSAGE);
         successfulMessage.setText("");
@@ -510,12 +543,12 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
         jLabel59 = new javax.swing.JLabel();
         jLabel60 = new javax.swing.JLabel();
         emailTextField = new javax.swing.JTextField();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        messageTextArea = new javax.swing.JTextArea();
         nameErrorLable = new javax.swing.JLabel();
         emailErrorLabel = new javax.swing.JLabel();
         subjectErrorLabel = new javax.swing.JLabel();
         messageErrorLabel = new javax.swing.JLabel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
         jLabel50 = new javax.swing.JLabel();
         jPanel23 = new javax.swing.JPanel();
         jLabel75 = new javax.swing.JLabel();
@@ -565,6 +598,7 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
         errorMessageSales = new javax.swing.JLabel();
         errorMessageStatus = new javax.swing.JLabel();
         successfulMessage = new javax.swing.JLabel();
+        undoButton = new javax.swing.JButton();
         prodOverviewPnl = new javax.swing.JPanel();
         overallSalesLabel = new javax.swing.JLabel();
         overallStockLabel = new javax.swing.JLabel();
@@ -573,11 +607,14 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
         totalStockLevel = new javax.swing.JLabel();
         totalItemSoldLabel = new javax.swing.JLabel();
         prodOverviewLabel = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        sortComboBox = new javax.swing.JComboBox<>();
         searchButton = new javax.swing.JButton();
         searchField = new javax.swing.JTextField();
-        loadingScreen = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
+        jLabel21 = new javax.swing.JLabel();
+        searchErrorLbl = new javax.swing.JLabel();
+        loadingScreen = new javax.swing.JPanel();
+        loadingPgTitleLbl = new javax.swing.JLabel();
         progressBar = new javax.swing.JProgressBar();
         progressBarNaming = new javax.swing.JLabel();
         loadingPgImage = new javax.swing.JLabel();
@@ -1150,10 +1187,10 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
         );
 
         jPanel1.add(jPanel18);
-        jPanel18.setBounds(90, 3270, 560, 600);
+        jPanel18.setBounds(90, 3280, 560, 600);
 
         jLabel53.setFont(new java.awt.Font("Noteworthy", 1, 24)); // NOI18N
-        jLabel53.setText("LEARM MORE ABOUT OUR PRODUCTS");
+        jLabel53.setText("LEARN MORE ABOUT OUR PRODUCTS");
         jPanel1.add(jLabel53);
         jLabel53.setBounds(90, 1860, 480, 39);
 
@@ -1193,9 +1230,9 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
         jPanel19.setMaximumSize(new java.awt.Dimension(1317, 658));
         jPanel19.setSize(new java.awt.Dimension(1317, 658));
 
-        jPanel24.setBackground(new java.awt.Color(225, 223, 208));
+        jPanel24.setBackground(new java.awt.Color(244, 241, 232));
 
-        jLabel51.setFont(new java.awt.Font("Helvetica Neue", 1, 36)); // NOI18N
+        jLabel51.setFont(new java.awt.Font("Kannada MN", 1, 36)); // NOI18N
         jLabel51.setText("Get In Touch");
 
         jLabel52.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
@@ -1238,55 +1275,54 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
             }
         });
 
-        messageTextArea.setColumns(20);
-        messageTextArea.setRows(5);
-        jScrollPane3.setViewportView(messageTextArea);
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane5.setViewportView(jTextArea1);
 
         javax.swing.GroupLayout jPanel24Layout = new javax.swing.GroupLayout(jPanel24);
         jPanel24.setLayout(jPanel24Layout);
         jPanel24Layout.setHorizontalGroup(
             jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel24Layout.createSequentialGroup()
-                .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel24Layout.createSequentialGroup()
-                        .addGap(29, 29, 29)
-                        .addComponent(jLabel51))
-                    .addGroup(jPanel24Layout.createSequentialGroup()
-                        .addGap(23, 23, 23)
-                        .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(emailTextField)
+                .addGap(23, 23, 23)
+                .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jScrollPane5)
+                    .addComponent(emailTextField, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel24Layout.createSequentialGroup()
+                        .addComponent(jLabel58)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(emailErrorLabel)
+                        .addGap(26, 26, 26))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel24Layout.createSequentialGroup()
+                        .addComponent(jLabel59)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(subjectErrorLabel)
+                        .addGap(24, 24, 24))
+                    .addComponent(subjectTextField, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(nameAboutUsTextField, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel24Layout.createSequentialGroup()
+                        .addComponent(jLabel60)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(messageErrorLabel)
+                        .addGap(20, 20, 20))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel24Layout.createSequentialGroup()
+                        .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel24Layout.createSequentialGroup()
-                                .addComponent(jLabel58)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(emailErrorLabel)
-                                .addGap(26, 26, 26))
-                            .addGroup(jPanel24Layout.createSequentialGroup()
-                                .addComponent(jLabel52)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(nameErrorLable)
-                                .addGap(28, 28, 28))
-                            .addGroup(jPanel24Layout.createSequentialGroup()
-                                .addComponent(jLabel59)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(subjectErrorLabel)
-                                .addGap(24, 24, 24))
-                            .addComponent(sendButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(subjectTextField)
-                            .addComponent(nameAboutUsTextField)
-                            .addGroup(jPanel24Layout.createSequentialGroup()
-                                .addComponent(jLabel60)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(messageErrorLabel)
-                                .addGap(20, 20, 20))
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 521, Short.MAX_VALUE))))
-                .addGap(0, 79, Short.MAX_VALUE))
+                                .addGap(6, 6, 6)
+                                .addComponent(jLabel51))
+                            .addComponent(jLabel52))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 270, Short.MAX_VALUE)
+                        .addComponent(nameErrorLable)
+                        .addGap(28, 28, 28))
+                    .addComponent(sendButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 81, Short.MAX_VALUE))
         );
         jPanel24Layout.setVerticalGroup(
             jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel24Layout.createSequentialGroup()
                 .addGap(34, 34, 34)
                 .addComponent(jLabel51)
-                .addGap(43, 43, 43)
+                .addGap(63, 63, 63)
                 .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel52)
                     .addComponent(nameErrorLable))
@@ -1306,14 +1342,13 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
                 .addComponent(subjectTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel24Layout.createSequentialGroup()
-                        .addComponent(jLabel60, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(27, 27, 27)
-                        .addComponent(sendButton, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel60, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(messageErrorLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(65, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(34, 34, 34)
+                .addComponent(sendButton, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(37, Short.MAX_VALUE))
         );
 
         jLabel50.setFont(new java.awt.Font("Kannada MN", 1, 24)); // NOI18N
@@ -1366,51 +1401,46 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
                                 .addComponent(jLabel76, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel75)))
                     .addGroup(jPanel23Layout.createSequentialGroup()
-                        .addGap(49, 49, 49)
+                        .addGap(56, 56, 56)
                         .addComponent(jLabel77)))
-                .addGap(64, 64, 64)
+                .addGap(57, 57, 57)
                 .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel23Layout.createSequentialGroup()
+                        .addComponent(jLabel78, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel81, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(84, 84, 84))
+                    .addGroup(jPanel23Layout.createSequentialGroup()
+                        .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel79, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel80, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel23Layout.createSequentialGroup()
-                                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel79, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel80, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(127, 127, 127)
-                                .addComponent(jLabel82))
+                                .addGap(76, 76, 76)
+                                .addComponent(jLabel83, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel23Layout.createSequentialGroup()
-                                .addComponent(jLabel78, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(40, 40, 40)
-                                .addComponent(jLabel81, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(105, 105, 105)
-                        .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel72)
-                            .addGroup(jPanel23Layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addComponent(jLabel73))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel23Layout.createSequentialGroup()
-                        .addComponent(jLabel83, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(74, 74, 74)
-                        .addComponent(jLabel74)))
-                .addContainerGap(28, Short.MAX_VALUE))
+                                .addGap(105, 105, 105)
+                                .addComponent(jLabel82)))
+                        .addGap(66, 66, 66)))
+                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel23Layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(jLabel73))
+                    .addComponent(jLabel72)
+                    .addComponent(jLabel74))
+                .addContainerGap(56, Short.MAX_VALUE))
         );
         jPanel23Layout.setVerticalGroup(
             jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel23Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel23Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel81, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel23Layout.createSequentialGroup()
-                        .addGap(25, 25, 25)
-                        .addComponent(jLabel72))
+                    .addComponent(jLabel81, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel23Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel23Layout.createSequentialGroup()
-                                .addComponent(jLabel75)
-                                .addGap(8, 8, 8))
-                            .addComponent(jLabel78, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jLabel75)
+                        .addGap(8, 8, 8))
+                    .addComponent(jLabel78, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel72, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGap(4, 4, 4)
                 .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel23Layout.createSequentialGroup()
@@ -1418,17 +1448,15 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel77))
                     .addGroup(jPanel23Layout.createSequentialGroup()
-                        .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel79, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel73)
-                                .addComponent(jLabel82)))
+                        .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel79)
+                            .addComponent(jLabel82)
+                            .addComponent(jLabel73))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel74)
-                                .addComponent(jLabel83))
-                            .addComponent(jLabel80))))
+                        .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel80)
+                            .addComponent(jLabel83)
+                            .addComponent(jLabel74))))
                 .addContainerGap(18, Short.MAX_VALUE))
         );
 
@@ -1455,26 +1483,26 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
                     .addGroup(jPanel19Layout.createSequentialGroup()
                         .addGap(38, 38, 38)
                         .addComponent(jLabel16)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 112, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(jPanel24, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(92, Short.MAX_VALUE))
         );
         jPanel19Layout.setVerticalGroup(
             jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel19Layout.createSequentialGroup()
-                .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(jPanel19Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jPanel24, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel19Layout.createSequentialGroup()
                         .addGap(59, 59, 59)
                         .addComponent(jLabel16)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(78, 78, 78)
                         .addComponent(jLabel50)
                         .addGap(18, 18, 18)
-                        .addComponent(jPanel23, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jPanel23, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel19Layout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addComponent(jPanel24, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(30, Short.MAX_VALUE))
         );
 
@@ -1529,6 +1557,7 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
         adminCtrlPnl.setMaximumSize(new java.awt.Dimension(1392, 748));
         adminCtrlPnl.setMinimumSize(new java.awt.Dimension(1392, 748));
         adminCtrlPnl.setPreferredSize(new java.awt.Dimension(1382, 686));
+        adminCtrlPnl.setSize(new java.awt.Dimension(100, 120));
 
         jScrollPane2.setBackground(new java.awt.Color(0, 0, 0));
 
@@ -1537,7 +1566,7 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
         craftTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {},
             new String [] {
-                "Product Code", "Product Name", "Price", "Stock", "Category", "Total Sales", "Status", "Date Created(yyyy/mm/dd)", "Weight"
+                "Product Code", "Product Name", "Price", "Stock", "Category", "Total Sales", "Status", "Date(yyyy/mm/dd)", "Weight"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -1550,9 +1579,8 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
         }
 
     );
-    craftTable.setAlignmentX(1.0F);
-    craftTable.setAlignmentY(1.0F);
     craftTable.setRowHeight(30);
+    craftTable.setRowSelectionAllowed(false);
     craftTable.setSelectionBackground(new java.awt.Color(255, 255, 255));
     craftTable.getTableHeader().setReorderingAllowed(false);
     jScrollPane2.setViewportView(craftTable);
@@ -1611,7 +1639,7 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
 
     addButton.setBackground(new java.awt.Color(134, 103, 83));
     addButton.setForeground(new java.awt.Color(255, 255, 255));
-    addButton.setText("add");
+    addButton.setText("Add");
     addButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             addButtonActionPerformed(evt);
@@ -1620,7 +1648,7 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
 
     updateButton.setBackground(new java.awt.Color(134, 103, 83));
     updateButton.setForeground(new java.awt.Color(255, 255, 255));
-    updateButton.setText("update");
+    updateButton.setText("Update");
     updateButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             updateButtonActionPerformed(evt);
@@ -1686,7 +1714,7 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
 
     clearButton.setBackground(new java.awt.Color(134, 103, 83));
     clearButton.setForeground(new java.awt.Color(255, 255, 255));
-    clearButton.setText("clear");
+    clearButton.setText("Clear");
     clearButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             clearButtonActionPerformed(evt);
@@ -1705,7 +1733,17 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
 
     errorMessageStatus.setForeground(new java.awt.Color(255, 0, 51));
 
-    successfulMessage.setForeground(new java.awt.Color(51, 153, 0));
+    successfulMessage.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
+    successfulMessage.setForeground(new java.awt.Color(102, 204, 0));
+
+    undoButton.setBackground(new java.awt.Color(134, 103, 83));
+    undoButton.setForeground(new java.awt.Color(255, 255, 255));
+    undoButton.setText("Undo");
+    undoButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            undoButtonActionPerformed(evt);
+        }
+    });
 
     javax.swing.GroupLayout productListPnlLayout = new javax.swing.GroupLayout(productListPnl);
     productListPnl.setLayout(productListPnlLayout);
@@ -1713,119 +1751,117 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
         productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(productListPnlLayout.createSequentialGroup()
             .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+            .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(productListPnlLayout.createSequentialGroup()
                     .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(productListPnlLayout.createSequentialGroup()
-                            .addGap(73, 73, 73)
-                            .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(productWeightTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(errorMessageWeight, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGap(42, 42, 42)
-                            .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(errorMessageDate, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(updateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(productDateTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGap(27, 27, 27)
-                            .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(productListPnlLayout.createSequentialGroup()
-                                    .addGap(43, 43, 43)
-                                    .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(productListPnlLayout.createSequentialGroup()
-                                            .addComponent(errorMessageSales, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                        .addGroup(productListPnlLayout.createSequentialGroup()
-                                            .addComponent(productSalesTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGap(0, 0, Short.MAX_VALUE))))))
-                        .addGroup(productListPnlLayout.createSequentialGroup()
-                            .addGap(126, 126, 126)
-                            .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(0, 0, Short.MAX_VALUE)))
-                    .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(clearButton, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(productListPnlLayout.createSequentialGroup()
-                            .addGap(31, 31, 31)
-                            .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(productStatusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(errorMessageStatus))))
-                    .addGap(864, 864, 864))
-                .addGroup(productListPnlLayout.createSequentialGroup()
-                    .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(successfulMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(productListPnlLayout.createSequentialGroup()
                             .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(productCodeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(productCodeTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
                                 .addComponent(errorMessageProdCode))
-                            .addGap(18, 18, 18)
+                            .addGap(24, 24, 24)
                             .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(productNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(errorMessageName)))
-                        .addComponent(successfulMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGap(31, 31, 31)
+                                .addComponent(productNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
+                                .addComponent(errorMessageName))))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(productInfoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(productListPnlLayout.createSequentialGroup()
+                            .addGap(17, 17, 17)
+                            .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(productPriceTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(errorMessagePrice, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(24, 24, 24)
+                            .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(productListPnlLayout.createSequentialGroup()
+                                    .addComponent(errorMessageStock, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(errorMessageCategory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGroup(productListPnlLayout.createSequentialGroup()
+                                    .addComponent(productStockTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(productCategoryComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addGap(0, 0, Short.MAX_VALUE))
+                .addGroup(productListPnlLayout.createSequentialGroup()
                     .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(productListPnlLayout.createSequentialGroup()
+                            .addGap(63, 63, 63)
+                            .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(productWeightTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(errorMessageWeight, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(40, 40, 40)
+                            .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(productDateTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(errorMessageDate, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(29, 29, 29)
                             .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(productPriceTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(errorMessagePrice, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(productStockTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(errorMessageStock, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGroup(productListPnlLayout.createSequentialGroup()
+                                    .addComponent(productSalesTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(31, 31, 31)
+                                    .addComponent(productStatusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(productListPnlLayout.createSequentialGroup()
+                                    .addComponent(errorMessageSales, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(36, 36, 36)
+                                    .addComponent(errorMessageStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGroup(productListPnlLayout.createSequentialGroup()
+                            .addGap(54, 54, 54)
+                            .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(47, 47, 47)
-                            .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(productCategoryComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(errorMessageCategory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addComponent(productInfoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGap(0, 0, Short.MAX_VALUE))))
+                            .addComponent(updateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(55, 55, 55)
+                            .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(56, 56, 56)
+                            .addComponent(clearButton, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(60, 60, 60)
+                            .addComponent(undoButton, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addContainerGap(108, Short.MAX_VALUE))))
     );
     productListPnlLayout.setVerticalGroup(
         productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(productListPnlLayout.createSequentialGroup()
             .addGap(15, 15, 15)
             .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                .addComponent(productInfoLabel)
-                .addComponent(successfulMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGap(41, 41, 41)
+                .addComponent(successfulMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(productInfoLabel))
+            .addGap(38, 38, 38)
             .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(errorMessageProdCode, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(errorMessagePrice, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(errorMessageName))
-                .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(errorMessageStock, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(errorMessageCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)))
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(productCodeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(productNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(productPriceTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(productStockTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(productCategoryComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGap(18, 18, 18)
-            .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(productListPnlLayout.createSequentialGroup()
+                    .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(errorMessageProdCode, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(errorMessageName, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(errorMessagePrice, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(errorMessageStock, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(errorMessageCategory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGap(11, 11, 11)
+                    .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(productCodeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(productNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(productPriceTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(productStockTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(productCategoryComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGap(18, 18, 18)
                     .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(errorMessageDate, javax.swing.GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
                             .addComponent(errorMessageSales, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addComponent(errorMessageWeight, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(productWeightTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(productDateTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(productSalesTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(productStatusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGap(0, 15, Short.MAX_VALUE)
-                    .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(updateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(clearButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGap(12, 12, 12))
-                .addGroup(productListPnlLayout.createSequentialGroup()
-                    .addComponent(errorMessageStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(errorMessageWeight, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addComponent(errorMessageStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(productDateTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(productWeightTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(productSalesTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(productStatusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+            .addGroup(productListPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(updateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(clearButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(undoButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGap(10, 10, 10))
     );
 
     productSalesTextField.getAccessibleContext().setAccessibleName("Customizable");
@@ -1880,29 +1916,29 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
     prodOverviewPnlLayout.setVerticalGroup(
         prodOverviewPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(prodOverviewPnlLayout.createSequentialGroup()
-            .addGap(30, 30, 30)
+            .addGap(18, 18, 18)
             .addComponent(prodOverviewLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(prodOverviewPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(overallSalesLabel)
                 .addComponent(totalSalesLabel))
-            .addGap(35, 35, 35)
+            .addGap(43, 43, 43)
             .addGroup(prodOverviewPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(overallStockLabel)
                 .addComponent(totalStockLevel))
-            .addGap(53, 53, 53)
+            .addGap(45, 45, 45)
             .addGroup(prodOverviewPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(itemsSoldLabel)
                 .addComponent(totalItemSoldLabel))
             .addGap(70, 70, 70))
     );
 
-    jComboBox1.setBackground(new java.awt.Color(134, 103, 83));
-    jComboBox1.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
-    jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sort By", "Name - Ascending", "Name - Descending", "Price - Ascending", "Price - Descending", "Stock - Ascending", "Stock - Descending" }));
-    jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+    sortComboBox.setBackground(new java.awt.Color(134, 103, 83));
+    sortComboBox.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
+    sortComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sort By", "Name - Ascending", "Name - Descending", "Price - Ascending", "Price - Descending", "Stock - Ascending", "Stock - Descending" }));
+    sortComboBox.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jComboBox1ActionPerformed(evt);
+            sortComboBoxActionPerformed(evt);
         }
     });
 
@@ -1924,6 +1960,8 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
         }
     });
 
+    searchErrorLbl.setForeground(new java.awt.Color(255, 0, 51));
+
     javax.swing.GroupLayout adminCtrlPnlLayout = new javax.swing.GroupLayout(adminCtrlPnl);
     adminCtrlPnl.setLayout(adminCtrlPnlLayout);
     adminCtrlPnlLayout.setHorizontalGroup(
@@ -1935,29 +1973,48 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
                     .addGroup(adminCtrlPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(craftTablePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(adminCtrlPnlLayout.createSequentialGroup()
-                            .addComponent(productListPnl, javax.swing.GroupLayout.PREFERRED_SIZE, 1055, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(productListPnl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addComponent(prodOverviewPnl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGap(10, 10, 10)))
+                            .addGap(4, 4, 4)))
                     .addContainerGap())
                 .addGroup(adminCtrlPnlLayout.createSequentialGroup()
                     .addGap(8, 8, 8)
                     .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                     .addComponent(searchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(28, 28, 28))))
+                    .addGap(18, 18, 18)
+                    .addComponent(searchErrorLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jLabel11)
+                    .addGroup(adminCtrlPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(adminCtrlPnlLayout.createSequentialGroup()
+                            .addGap(18, 18, 18)
+                            .addComponent(jLabel21)
+                            .addGap(0, 0, Short.MAX_VALUE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, adminCtrlPnlLayout.createSequentialGroup()
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(sortComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(22, 22, 22))))))
     );
     adminCtrlPnlLayout.setVerticalGroup(
         adminCtrlPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(adminCtrlPnlLayout.createSequentialGroup()
-            .addContainerGap()
-            .addGroup(adminCtrlPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
-                .addComponent(jComboBox1)
-                .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(searchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addGroup(adminCtrlPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(adminCtrlPnlLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addGroup(adminCtrlPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(adminCtrlPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(searchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel21))
+                        .addComponent(searchErrorLbl, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, adminCtrlPnlLayout.createSequentialGroup()
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(sortComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
             .addComponent(craftTablePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addGroup(adminCtrlPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -2009,14 +2066,14 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
     loadingScreen.setPreferredSize(new java.awt.Dimension(1392, 748));
     loadingScreen.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-    jLabel11.setFont(new java.awt.Font("Herculanum", 0, 48)); // NOI18N
-    jLabel11.setText("UMBRA CERAMICS");
-    loadingScreen.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 260, 490, -1));
+    loadingPgTitleLbl.setFont(new java.awt.Font("American Typewriter", 0, 48)); // NOI18N
+    loadingPgTitleLbl.setText("UMBRA CERAMICS");
+    loadingScreen.add(loadingPgTitleLbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 260, 490, -1));
     loadingScreen.add(progressBar, new org.netbeans.lib.awtextra.AbsoluteConstraints(488, 500, 400, 21));
     loadingScreen.add(progressBarNaming, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 530, 140, 30));
 
     loadingPgImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/craft/resources/Screenshot 2024-12-25 at 12.48.26 AM.png"))); // NOI18N
-    loadingScreen.add(loadingPgImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, -30, 1390, 810));
+    loadingScreen.add(loadingPgImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, -30, 1380, 810));
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
@@ -2031,12 +2088,15 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
 
     pack();
     }// </editor-fold>//GEN-END:initComponents
-//logs out from the system
+/**
+     * logs out from the system
+     *
+     * @param evt The event triggered when the logout button is clicked
+     */
     private void logOutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logOutButtonActionPerformed
-        int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to log out?", "Log Out", JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE
-        );
+        int option = dialogConfirm("Are you sure you want to log out?", "Log Out");
         if (option == JOptionPane.YES_OPTION) {
+            clearData();
             loadScreen("loginScreen");
         }
 
@@ -2045,80 +2105,85 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
     private void productCodeTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_productCodeTextFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_productCodeTextFieldActionPerformed
-//add product into the system
+    /**
+     * add product into the system
+     *
+     * @param evt The event triggered when the add button is clicked
+     */
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
 
         boolean valid1 = validation();
         // Check if product code already exists
         if (!checkExistingValue(productCodeTextField.getText())) {
             if (valid1) {
-                CraftModel addedProd = new CraftModel(productCodeTextField.getText(), productNameTextField.getText(), Float.parseFloat(productPriceTextField.getText()), Integer.parseInt(productStockTextField.getText()), productCategoryComboBox.getSelectedItem().toString(), Integer.parseInt(productSalesTextField.getText()), productStatusComboBox.getSelectedItem().toString(), productDateTextField.getText(), Float.parseFloat(productWeightTextField.getText())); 
+                CraftModel addedProd = new CraftModel(productCodeTextField.getText(), productNameTextField.getText(), Float.parseFloat(productPriceTextField.getText()), Integer.parseInt(productStockTextField.getText()), productCategoryComboBox.getSelectedItem().toString(), Integer.parseInt(productSalesTextField.getText()), productStatusComboBox.getSelectedItem().toString(), productDateTextField.getText(), Float.parseFloat(productWeightTextField.getText()));
                 addProduct(addedProd);// Add the product to the system
-                successfulMessage.setText("Product is added Successfully");
                 productOverview();
-                System.out.println("Original Craft List from add button: " + craftList);
+                clearData();
+                successfulMessage.setText("Product is added Successfully");
             }
         } else {
             resetValidation();
             dialogMessage("the code already exists", "ERROR");
+            productCodeTextField.setBorder(createTitledBorder(Color.RED, "Product Code"));
         }
     }//GEN-LAST:event_addButtonActionPerformed
-//update product of the system
+    /**
+     * update product of the system
+     *
+     * @param evt The event triggered when the update button is clicked
+     */
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
 
         boolean valid2 = validation();
         if (!productCodeTextField.getText().isEmpty()) {
             if (checkExistingValue(productCodeTextField.getText())) {
-                for (int i = 0; i < table.getRowCount(); i++) {
-                    if (table.getValueAt(i, 0).toString().equals(productCodeTextField.getText())) {
+                for (int i = 0; i < craftList.size(); i++) {
+                    if (craftList.get(i).getProductId().equals(productCodeTextField.getText())) {
                         if (valid2) {
-                            craftList.set(i, new CraftModel(productCodeTextField.getText(), productNameTextField.getText(), Float.parseFloat(productPriceTextField.getText()), Integer.parseInt(productStockTextField.getText()),
-                                    productCategoryComboBox.getSelectedItem().toString(), Integer.parseInt(productSalesTextField.getText()),
+                            // Update the item in the list directly
+                            craftList.set(i, new CraftModel(
+                                    productCodeTextField.getText(),
+                                    productNameTextField.getText(),
+                                    Float.parseFloat(productPriceTextField.getText()),
+                                    Integer.parseInt(productStockTextField.getText()),
+                                    productCategoryComboBox.getSelectedItem().toString(),
+                                    Integer.parseInt(productSalesTextField.getText()),
                                     productStatusComboBox.getSelectedItem().toString(),
                                     productDateTextField.getText(),
                                     Float.parseFloat(productWeightTextField.getText())
                             ));
-                            System.out.println("Original Craft List from update button: " + craftList);
-                            table.setValueAt(productCodeTextField.getText(), i, 0);
-                            table.setValueAt(productNameTextField.getText(), i, 1);
-                            table.setValueAt(Float.parseFloat(productPriceTextField.getText()), i, 2);
-                            table.setValueAt(productStockTextField.getText(), i, 3);
-                            table.setValueAt(productCategoryComboBox.getSelectedItem(), i, 4);
-                            table.setValueAt(productSalesTextField.getText(), i, 5);
-                            table.setValueAt(productStatusComboBox.getSelectedItem(), i, 6);
-                            table.setValueAt(productDateTextField.getText(), i, 7);
-                            table.setValueAt(Float.parseFloat(productWeightTextField.getText()), i, 8);
-                            successfulMessage.setText("Product is updated Successfully");
-                            System.out.println("Original Craft List from add button: " + craftList);
+                            // Use the loadTable method to refresh the table
+                            loadTable(craftList);
+                            clearData();
                             productOverview();
+                            successfulMessage.setText("Product is updated Successfully");
                             break;
                         }
                     }
                 }
-
             } else {
                 resetValidation();
                 dialogMessage("The product code doesn't exist", "ERROR");
+                productCodeTextField.setBorder(createTitledBorder(Color.RED, "Product Code"));
             }
-        } else {
-            errorMessageProdCode.setText("product code is empty");
         }
-
     }//GEN-LAST:event_updateButtonActionPerformed
 
     private void jPasswordField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jPasswordField3ActionPerformed
-//login users into the system
+    /**
+     * login users into the system
+     *
+     * @param evt The event triggered when the login button is clicked
+     */
     private void loginButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButton1ActionPerformed
-        // TODO add your handling code here:
         if (checkCredentials()) {
             loadScreen("mainScreen");
             jPasswordField3.setText("");
             usernameTextField.setText("");
         }
-
-
     }//GEN-LAST:event_loginButton1ActionPerformed
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
@@ -2140,46 +2205,50 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
     private void productCategoryComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_productCategoryComboBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_productCategoryComboBoxActionPerformed
-//delete products from the system
+    /**
+     * delete products from the system
+     *
+     * @param evt The event triggered when the delete button is clicked
+     */
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
+        resetValidation();
+        if (productCodeTextField.getText().isEmpty()) {
+            errorMessageProdCode.setText("Product code is empty");
+            checkEmpty(productCodeTextField, "Product Code", errorMessageProdCode, "<html>The code must have <br>8 digits", Color.RED, Color.GREEN, Validation.validateCode(productCodeTextField.getText()));
+        } else if (checkExistingValue(productCodeTextField.getText())) {
+            int option = dialogConfirm("Are you sure you want to delete?", "Delete");
 
-        int option = dialogConfirm("Are you sure you want to delete?", "Delete");
-
-        if (!productCodeTextField.getText().isEmpty()) {
             if (option == JOptionPane.YES_OPTION) {
                 String productCode = productCodeTextField.getText();
-                if (checkExistingValue(productCode)) {
-
-                    // Iterate over the table rows to find the matching product code
-                    for (int i = 0; i < table.getRowCount(); i++) {
-                        if (table.getValueAt(i, 0).toString().equals(productCode)) {
-                            craftList.remove(i);
-                            DefaultTableModel model = (DefaultTableModel) craftTable.getModel();
-                            model.removeRow(i);
-                            productOverview();
-                            successfulMessage.setText("Deleted Successfully");
-                            break; // Exit the loop
-                        }
+                // Iterate over the table rows to find the matching product code
+                for (int i = 0; i < craftList.size(); i++) {
+                    if (craftList.get(i).getProductId().equals(productCode)) {
+                        undoDelete.push(craftList.get(i));
+                        craftList.remove(i);
+                        loadTable(craftList);
+                        productOverview();
+                        clearData();
+                        successfulMessage.setText("Deleted Successfully");
+                        break; // Exit the loop
                     }
-                } else {
-                    // If the product code doesn't exist, show an error dialog
-                    clearData();
-                    dialogMessage("The code doesn't exist", "ERROR");
                 }
             }
         } else {
-            // Show an error if the product code text field is empty
-            errorMessageProdCode.setText("Product code is empty");
+            // If the product code doesn't exist, show an error dialog
+            clearData();
+            errorMessageProdCode.setText("");
+            dialogMessage("The code doesn't exist", "ERROR");
         }
-
-
     }//GEN-LAST:event_deleteButtonActionPerformed
-//clear textfields and error messages from the screen
+    /**
+     * clear text fields and error messages from the screen
+     *
+     * @param evt The event triggered when the clear button is clicked
+     */
     private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
         int option = dialogConfirm("Are you sure you want to clear?", "Clear");
         if (option == JOptionPane.YES_OPTION) {
             clearData();
-            successfulMessage.setText("");
         }
     }//GEN-LAST:event_clearButtonActionPerformed
 
@@ -2199,70 +2268,78 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
     private void subjectTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subjectTextFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_subjectTextFieldActionPerformed
-
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-
-        String selectedOption = (String) jComboBox1.getSelectedItem();
-
+    /**
+     * Handles the action of the sort combo box when the user selects a sorting
+     * option.
+     *
+     * @param evt The event gets triggered when the user selects an option from
+     * the combo box.
+     */
+    private void sortComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sortComboBoxActionPerformed
+        String selectedOption = (String) sortComboBox.getSelectedItem();
         switch (selectedOption) {
             case "Name - Ascending":
-                System.out.println("Original Craft List: " + craftList);
-
                 List<CraftModel> sortedListByNameAsc = insertionSort.sortByName(craftList, true);
-                updateTable(sortedListByNameAsc);
+
+                loadTable(sortedListByNameAsc);
                 break;
             case "Name - Descending":
                 List<CraftModel> sortedListByNameDesc = insertionSort.sortByName(craftList, false);
-                updateTable(sortedListByNameDesc);
+                loadTable(sortedListByNameDesc);
                 break;
             case "Price - Ascending":
                 List<CraftModel> sortedListByPriceAsc = merge.sortByPrice(craftList, true);
-                updateTable(sortedListByPriceAsc);
+                loadTable(sortedListByPriceAsc);
                 break;
             case "Price - Descending":
                 List<CraftModel> sortedListByPriceDesc = merge.sortByPrice(craftList, false);
-                updateTable(sortedListByPriceDesc);
+                loadTable(sortedListByPriceDesc);
                 break;
             case "Stock - Ascending":
                 List<CraftModel> sortedListByStockAsc = selectionSort.sortByStock(craftList, false);
-                updateTable(sortedListByStockAsc);
+                loadTable(sortedListByStockAsc);
                 break;
             case "Stock - Descending":
                 List<CraftModel> sortedListByStockDesc = selectionSort.sortByStock(craftList, true);
-                updateTable(sortedListByStockDesc);
+                loadTable(sortedListByStockDesc);
                 break;
             default:
                 break;
         }
-
-
-    }//GEN-LAST:event_jComboBox1ActionPerformed
-
+    }//GEN-LAST:event_sortComboBoxActionPerformed
+    /**
+     * Searches items by name
+     *
+     * @param evt The event triggered when the search button is clicked
+     */
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
-
         // Sort the craft list by name in ascending order
         List<CraftModel> sortedListByName = insertionSort.sortByName(craftList, true);
 
         String targetName = searchField.getText().trim();
 
         if (targetName.isEmpty()) {
-            System.out.println("Please enter a valid name to search.");
+            searchErrorLbl.setText("Please enter a valid name to search.");
             return;
         }
         // Find matching items with partial match
-        List<CraftModel> matchingItems = new ArrayList<>();
-        for (CraftModel item : sortedListByName) {
-            if (item.getName() != null && item.getName().toLowerCase().equals(targetName.toLowerCase())) {
-                matchingItems.add(item);
+        CraftModel result = binarySearch.searchByName(targetName, sortedListByName, 0, sortedListByName.size() - 1);
+
+        if (result != null) {
+            sortedListByName.clear();  // Clear the entire list
+            sortedListByName.add(result);  // Add the result at the top
+
+            
+            // Add all other items except the result back to the list
+            for (CraftModel item : craftList) {
+                if (item != result) {
+                    sortedListByName.add(item);
+                }
             }
-        }
-        if (!matchingItems.isEmpty()) {
-            System.out.println("Found " + matchingItems.size() + " items containing name: " + targetName);
-            sortedListByName.removeAll(matchingItems);
-            sortedListByName.addAll(0, matchingItems);
-            updateTable(sortedListByName);
+            loadTable(sortedListByName);
+            searchErrorLbl.setText(""); // Clear any error messages
         } else {
-            System.out.println("No items containing name: " + targetName + " found.");
+            searchErrorLbl.setText("No results found.");
         }
 
 
@@ -2271,32 +2348,42 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
     private void searchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_searchFieldActionPerformed
+    /**
+     * Restores recently deleted item from the lis
+     *
+     * @param evt The event triggered when the undo button is clicked
+     */
+    private void undoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoButtonActionPerformed
+        // Check if there's a product in the undo stack to restore
+        if (!undoDelete.isEmpty()) {
+            CraftModel product = undoDelete.pop();  // Get the last deleted product from the stack
 
-    private void updateTable(List<CraftModel> sortedList) {
-        // DefaultTableModel to populate the JTable
-        DefaultTableModel model = (DefaultTableModel) craftTable.getModel();
+            // Check if product exists in the list already to avoid duplicates
+            boolean exists = false;
+            for (int i = 0; i < craftList.size(); i++) {  // Fix the loop condition to i < craftList.size()
+                if (craftList.get(i).getProductId().equals(product.getProductId())) {
+                    exists = true;  // If it exists, break the loop and don't add the product
+                    break;
+                }
+            }
 
-        // Clear the table before populating with new data
-        model.setRowCount(0);
-
-        // Populate the table with data from the sorted list
-        for (CraftModel product : sortedList) {
-            model.addRow(new Object[]{
-                product.getProductId(),
-                product.getName(),
-                product.getPrice(),
-                product.getStock(),
-                product.getCategory(),
-                product.getTotalSales(),
-                product.getStatus(),
-                product.getDateCreated(),
-                product.getWeight()
-            });
+            // If the product doesn't exist, add it back to the list
+            if (!exists) {
+                clearData();
+                craftList.add(product);  // Add the product back to the list
+                loadTable(craftList);  // Refresh the table
+                productOverview();  // Update product overview
+                successfulMessage.setText("Undo Successful");  // Show success message
+            } else {
+                clearData();
+                dialogMessage("Product code already exists", "ERROR");  // Error if product exists
+            }
+        } else {
+            clearData();
+            dialogMessage("No product to undo", "ERROR");  // Error if there's no product to undo
         }
-        craftTable.revalidate();
-        craftTable.repaint();
 
-    }
+    }//GEN-LAST:event_undoButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -2362,7 +2449,6 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
     private javax.swing.JPanel homePnl;
     private javax.swing.JLabel itemsSoldLabel;
     private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -2376,6 +2462,7 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
@@ -2448,10 +2535,12 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
     private javax.swing.JPasswordField jPasswordField3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JLabel loadingPgImage;
+    private javax.swing.JLabel loadingPgTitleLbl;
     private javax.swing.JPanel loadingScreen;
     private javax.swing.JButton logOutButton;
     private javax.swing.JButton loginButton1;
@@ -2462,7 +2551,6 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
     private javax.swing.JPanel mainScreenBodyPnl;
     private javax.swing.JPanel mainScreenTitlePnl;
     private javax.swing.JLabel messageErrorLabel;
-    private javax.swing.JTextArea messageTextArea;
     private javax.swing.JTextField nameAboutUsTextField;
     private javax.swing.JLabel nameErrorLable;
     private javax.swing.JLabel overallSalesLabel;
@@ -2487,8 +2575,10 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
     private javax.swing.JProgressBar progressBar;
     private javax.swing.JLabel progressBarNaming;
     private javax.swing.JButton searchButton;
+    private javax.swing.JLabel searchErrorLbl;
     private javax.swing.JTextField searchField;
     private javax.swing.JButton sendButton;
+    private javax.swing.JComboBox<String> sortComboBox;
     private javax.swing.JLabel subjectErrorLabel;
     private javax.swing.JTextField subjectTextField;
     private javax.swing.JLabel successfulMessage;
@@ -2496,6 +2586,7 @@ public class Craft_23048590DixitaBajracharya extends javax.swing.JFrame {
     private javax.swing.JLabel totalItemSoldLabel;
     private javax.swing.JLabel totalSalesLabel;
     private javax.swing.JLabel totalStockLevel;
+    private javax.swing.JButton undoButton;
     private javax.swing.JButton updateButton;
     private javax.swing.JPanel usernamePassword;
     private javax.swing.JTextField usernameTextField;

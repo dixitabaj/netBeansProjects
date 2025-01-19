@@ -9,11 +9,11 @@ import java.util.List;
  * @author dixitabajracharya
  */
 public class InsertionSort {
-     List<CraftModel> sortedList;
+     List<CraftModel> craftList;
 
     
     public InsertionSort(){
-        sortedList = new ArrayList<>();
+        craftList = new ArrayList<>();
     }
 
     /**
@@ -23,25 +23,24 @@ public class InsertionSort {
      * @param ascending  determines the sorting order
      */
     public List<CraftModel> sortByName(List<CraftModel> craftItems, boolean ascending) {
-        sortedList.clear();
-        sortedList.addAll(craftItems);
+        craftList.clear();
+        craftList.addAll(craftItems);
         if (craftItems == null || craftItems.isEmpty()) {
             throw new IllegalArgumentException("Craft list cannot be null or empty.");
         }
-
-
-        // Insertion Sort Algorithm
-        for (int i = 1; i < sortedList.size(); i++) {
-            CraftModel currentItem = sortedList.get(i);
+        
+        //Iterate the list from the second element till the end
+        for (int i = 1; i < craftList.size(); i++) {
+            CraftModel currentItem = craftList.get(i);
             int j = i - 1;
-            while (j >= 0 && compare(sortedList.get(j), currentItem, ascending)) {
-                sortedList.set(j + 1, sortedList.get(j)); // Shift element to the right
+            while (j >= 0 && compare(craftList.get(j), currentItem, ascending)) {
+                craftList.set(j + 1, craftList.get(j)); // Shift element to the right
                 j--;
             }
-            sortedList.set(j + 1, currentItem);
+            craftList.set(j + 1, currentItem);
         }
 
-        return sortedList;
+        return craftList;
     }
 
     /**
@@ -54,7 +53,7 @@ public class InsertionSort {
     private boolean compare(CraftModel first, CraftModel second, boolean ascending) {
         String firstName = first.getName() == null ? "" : first.getName();
         String secondName = second.getName() == null ? "" : second.getName();
-        int comparisonResult = firstName.compareTo(secondName);
+        int comparisonResult = firstName.toLowerCase().compareTo(secondName.toLowerCase());
         return ascending ? (comparisonResult > 0) : (comparisonResult < 0);
     }
 }
